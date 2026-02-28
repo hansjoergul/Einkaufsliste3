@@ -1,443 +1,1203 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Unsere Einkaufsliste</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>🛒 Einkauf</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
     <style>
-        :root {
-            --primary-color: #2E7D32; 
-            --bg-color: #f4f4f9;
-            --card-bg: #ffffff;
-            --text-color: #222;
-            --border-color: #ddd;
-            --danger-color: #d32f2f;
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root {
+            --accent: #34d399;
+            --accent2: #6ee7b7;
+            --danger: #f87171;
+            --warning: #fbbf24;
+            --radius: 20px;
+            --radius-sm: 14px;
+            --radius-xs: 10px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --spring: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0d1117;
+            --bg2: #161b22;
+            --bg3: #21262d;
+            --bg4: #30363d;
+            --text: #e6edf3;
+            --text2: #8b949e;
+            --text3: #484f58;
+            --border: #30363d;
+            --card: #161b22;
+            --card-hover: #1c2128;
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
+            --glow: 0 0 20px rgba(52,211,153,0.15);
+        }
+
+        [data-theme="light"] {
+            --bg: #f0f4f8;
+            --bg2: #ffffff;
+            --bg3: #f0f4f8;
+            --bg4: #e2e8f0;
+            --text: #1a202c;
+            --text2: #4a5568;
+            --text3: #a0aec0;
+            --border: #e2e8f0;
+            --card: #ffffff;
+            --card-hover: #f7fafc;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+            --glow: 0 0 20px rgba(52,211,153,0.1);
+        }
 
         body {
-            font-family: sans-serif;
-            margin: 0; background-color: var(--bg-color);
-            color: var(--text-color);
-            padding-bottom: 120px; /* Mehr Platz unten für 2 Buttons */
+            font-family: 'Sora', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100dvh;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
         }
 
-        header {
-            background-color: var(--primary-color);
-            color: white; padding: 15px; text-align: center;
-            position: sticky; top: 0; z-index: 1000;
+        .app {
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--bg);
+            position: relative;
+            overflow: hidden;
         }
 
+        /* HEADER */
+        .header {
+            padding: 16px 20px 12px;
+            padding-top: calc(16px + env(safe-area-inset-top));
+            background: var(--bg);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .app-title {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text);
+        }
+
+        .app-title span {
+            color: var(--accent);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg2);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 18px;
+        }
+
+        .icon-btn:active { transform: scale(0.92); }
+
+        /* SEARCH */
+        .search-wrap {
+            position: relative;
+        }
+
+        .search-icon-el {
+            position: absolute; left: 14px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            pointer-events: none;
+            color: var(--text3);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 13px 16px 13px 44px;
+            background: var(--bg2);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: 'Sora', sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: var(--glow);
+        }
+
+        .search-input::placeholder { color: var(--text3); }
+
+        /* CATEGORY CHIPS */
+        .chips-wrap {
+            display: flex;
+            gap: 8px;
+            padding: 12px 20px 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .chips-wrap::-webkit-scrollbar { display: none; }
+
+        .chip {
+            flex-shrink: 0;
+            padding: 7px 14px;
+            border-radius: 100px;
+            border: 1.5px solid var(--border);
+            background: var(--bg2);
+            color: var(--text2);
+            font-family: 'Sora', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .chip.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #0d1117;
+        }
+
+        .chip:active { transform: scale(0.95); }
+
+        /* TABS */
         .tabs {
-            display: flex; background: white;
-            position: sticky; top: 54px; z-index: 900;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            padding: 12px 20px 0;
+            gap: 4px;
+            background: var(--bg);
         }
 
-        .tab-btn {
-            flex: 1; padding: 15px; border: none; background: none;
-            font-weight: bold; color: #666; cursor: pointer;
+        .tab {
+            flex: 1;
+            padding: 11px 8px;
+            border: none;
+            background: none;
+            color: var(--text3);
+            font-family: 'Sora', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: var(--radius-xs);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
         }
 
-        .tab-btn.active { color: var(--primary-color); border-bottom: 3px solid var(--primary-color); }
+        .tab .tab-icon { font-size: 20px; }
 
-        .search-container { padding: 10px; background: white; }
-        #search-input {
-            width: 100%; padding: 12px; border: 1px solid #ccc;
-            border-radius: 25px; font-size: 1rem;
+        .tab.active {
+            color: var(--accent);
+            background: rgba(52,211,153,0.08);
         }
 
-        .view-section { display: none; padding: 12px; }
-        .view-section.active { display: block; }
+        .tab:active { transform: scale(0.94); }
 
-        .cat-title { font-weight: bold; margin: 20px 0 10px; color: var(--primary-color); border-bottom: 1px solid #ddd; }
-
-        .product-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;
+        /* CONTENT */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 12px 0 100px;
+            scrollbar-width: none;
         }
 
+        .content::-webkit-scrollbar { display: none; }
+
+        .view { display: none; }
+        .view.active { display: block; animation: fadeUp 0.25s ease; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SECTION */
+        .section { padding: 0 16px; margin-bottom: 8px; }
+
+        .section-header {
+            padding: 6px 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-icon {
+            width: 28px; height: 28px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--text3);
+        }
+
+        .section-count {
+            margin-left: auto;
+            background: var(--bg3);
+            color: var(--text3);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 100px;
+        }
+
+        /* PRODUCT CARD */
         .product-card {
-            background: white; padding: 10px; border-radius: 12px; text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: relative;
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
-        .product-card.in-cart { border: 2px solid var(--primary-color); background: #f1f8e9; }
 
-        .prod-icon { font-size: 2rem; display: block; }
-        .prod-name { font-size: 0.8rem; font-weight: bold; display: block; margin: 5px 0; min-height: 30px; display: flex; align-items: center; justify-content: center;}
-
-        .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-        .btn-ctrl { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #ccc; background: white; font-weight: bold; }
-        .btn-plus { background: var(--primary-color); color: white; border: none; }
-
-        .shopping-list-item {
-            background: white; margin-bottom: 8px; padding: 12px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: space-between;
+        .product-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            border-radius: 3px;
+            background: transparent;
+            transition: var(--transition);
         }
-        .shopping-list-item.checked { opacity: 0.5; text-decoration: line-through; }
 
-        .bottom-bar {
-            position: fixed; bottom: 0; width: 100%; padding: 15px; background: white;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: none;
-            display: flex; gap: 10px; /* Abstand zwischen Buttons */
+        .product-card.in-cart {
+            border-color: rgba(52,211,153,0.25);
+            background: rgba(52,211,153,0.04);
         }
-        /* Standardmäßig verstecken, wird per JS eingeblendet */
-        #shop-footer { display: none; }
-        #shop-footer.visible { display: flex; }
 
-        .btn-action { flex: 1; padding: 15px; border: none; border-radius: 10px; font-weight: bold; color: white; cursor: pointer; }
-        .btn-pdf { background: var(--primary-color); }
-        .btn-reset { background: var(--danger-color); }
+        .product-card.in-cart::before {
+            background: var(--accent);
+        }
+
+        .product-card.checked {
+            opacity: 0.45;
+        }
+
+        .product-card:active { transform: scale(0.98); }
+
+        /* ICON BUBBLE */
+        .icon-bubble {
+            width: 44px; height: 44px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .product-card.checked .icon-bubble {
+            filter: grayscale(1);
+        }
+
+        /* Category colors */
+        .cat-obst { background: rgba(251,146,60,0.15); }
+        .cat-vorrat { background: rgba(251,191,36,0.15); }
+        .cat-backwaren { background: rgba(217,119,6,0.15); }
+        .cat-kuhlung { background: rgba(59,130,246,0.15); }
+        .cat-tiefkuhl { background: rgba(99,102,241,0.15); }
+        .cat-haushalt { background: rgba(156,163,175,0.15); }
+        .cat-getrankke { background: rgba(14,165,233,0.15); }
+        .cat-suss { background: rgba(236,72,153,0.15); }
+
+        .product-info { flex: 1; min-width: 0; }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-card.checked .product-name {
+            text-decoration: line-through;
+            color: var(--text3);
+        }
+
+        .product-sub {
+            font-size: 11px;
+            color: var(--text3);
+            margin-top: 1px;
+            font-weight: 400;
+        }
+
+        /* QUANTITY CONTROL */
+        .qty-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .qty-btn {
+            width: 30px; height: 30px;
+            border-radius: 9px;
+            border: 1.5px solid var(--border);
+            background: var(--bg3);
+            color: var(--text);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            transition: var(--spring);
+            flex-shrink: 0;
+        }
+
+        .qty-btn.plus { border-color: var(--accent); background: rgba(52,211,153,0.1); color: var(--accent); }
+        .qty-btn:active { transform: scale(0.85); }
+        .qty-btn:disabled { opacity: 0.3; cursor: default; }
+
+        .qty-val {
+            min-width: 22px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .qty-val.nonzero { color: var(--accent); }
+
+        /* CHECKBOX */
+        .check-box {
+            width: 26px; height: 26px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            transition: var(--spring);
+            cursor: pointer;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .check-box.done {
+            background: var(--accent);
+            border-color: var(--accent);
+            animation: checkPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes checkPop {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.25); }
+            100% { transform: scale(1); }
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            margin: 4px 16px 16px;
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            border: 1.5px solid var(--border);
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+
+        .stat-lbl {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-track {
+            height: 6px;
+            background: var(--bg3);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 100px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* EMPTY STATE */
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-emoji { font-size: 56px; margin-bottom: 16px; opacity: 0.4; }
+        .empty-text { font-size: 16px; font-weight: 600; color: var(--text3); }
+        .empty-sub { font-size: 13px; color: var(--text3); margin-top: 4px; opacity: 0.6; }
+
+        /* FLOATING ACTIONS */
+        .fabs {
+            position: fixed;
+            bottom: 20px;
+            bottom: calc(20px + env(safe-area-inset-bottom));
+            right: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 50;
+        }
+
+        .fab {
+            width: 50px; height: 50px;
+            border-radius: 16px;
+            border: none;
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: var(--spring);
+            font-size: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .fab:active { transform: scale(0.9); }
+        .fab-pdf { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .fab-clear { background: linear-gradient(135deg, var(--danger), #dc2626); }
+
+        /* MODAL */
+        .modal-bg {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 0 0 env(safe-area-inset-bottom);
+        }
+
+        .modal-bg.open { display: flex; animation: fadeIn 0.2s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal {
+            background: var(--bg2);
+            border-radius: 24px 24px 0 0;
+            padding: 28px 24px 32px;
+            width: 100%;
+            max-width: 480px;
+            animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-handle {
+            width: 36px; height: 4px;
+            background: var(--border);
+            border-radius: 100px;
+            margin: -12px auto 20px;
+        }
+
+        .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+        .modal-text { color: var(--text2); font-size: 14px; margin-bottom: 24px; }
+
+        .modal-btns { display: flex; gap: 10px; }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:active { transform: scale(0.96); }
+        .btn-cancel { background: var(--bg3); color: var(--text2); }
+        .btn-danger { background: var(--danger); color: white; }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            top: 20px;
+            top: calc(20px + env(safe-area-inset-top));
+            left: 50%;
+            transform: translateX(-50%) translateY(-80px);
+            background: var(--bg2);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            padding: 12px 20px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 200;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            white-space: nowrap;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* BADGE */
+        .cart-badge {
+            position: absolute;
+            top: -4px; right: -4px;
+            background: var(--accent);
+            color: #0d1117;
+            font-size: 9px;
+            font-weight: 800;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
     </style>
 </head>
 <body>
+<div class="app">
 
-    <header><h1>🛒 Unsere Cloud-Liste</h1></header>
-
-    <nav class="tabs">
-        <button class="tab-btn active" onclick="app.switchTab('all')">Produkte</button>
-        <button class="tab-btn" onclick="app.switchTab('cats')">Kategorien</button>
-        <button class="tab-btn" onclick="app.switchTab('shop')">Einkaufen</button>
-    </nav>
-
-    <div id="search-wrapper" class="search-container">
-        <input type="text" id="search-input" placeholder="Suchen..." oninput="app.handleSearch()">
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-top">
+            <div class="app-title">Einkauf<span>.</span></div>
+            <div class="header-actions">
+                <div class="icon-btn" id="themeBtn" title="Theme wechseln">🌙</div>
+                <div class="icon-btn" style="position:relative" id="cartIconBtn">
+                    🛒
+                    <div class="cart-badge" id="cartBadge" style="display:none">0</div>
+                </div>
+            </div>
+        </div>
+        <div class="search-wrap">
+            <span class="search-icon-el">🔍</span>
+            <input type="search" class="search-input" id="searchInput" placeholder="Produkt suchen…" autocomplete="off">
+        </div>
     </div>
 
-    <section id="view-all" class="view-section active"><div id="grid-container" class="product-grid"></div></section>
-    <section id="view-cats" class="view-section"><div id="cat-list-container"></div></section>
-    <section id="view-shop" class="view-section"><div id="shopping-list-container"></div></section>
-
-    <div id="shop-footer" class="bottom-bar">
-        <button class="btn-action btn-reset" onclick="app.clearCart()">🗑️ Alles Löschen</button>
-        <button class="btn-action btn-pdf" onclick="app.exportPDF()">📄 PDF</button>
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab active" data-view="products">
+            <span class="tab-icon">🏪</span>Produkte
+        </button>
+        <button class="tab" data-view="categories">
+            <span class="tab-icon">📂</span>Kategorien
+        </button>
+        <button class="tab" data-view="shopping">
+            <span class="tab-icon">✅</span>Einkaufen
+        </button>
     </div>
 
-    <script type="module">
-        // Firebase Setup
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    <!-- CATEGORY CHIPS (only on products view) -->
+    <div class="chips-wrap" id="chipsWrap">
+        <button class="chip active" data-cat="">Alle</button>
+    </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBDchXMOrJO3Qy9yQISP87vOeE7vZU5yD4",
-            authDomain: "einkaufsliste-746a1.firebaseapp.com",
-            databaseURL: "https://einkaufsliste-746a1-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "einkaufsliste-746a1",
-            storageBucket: "einkaufsliste-746a1.firebasestorage.app",
-            messagingSenderId: "152718589857",
-            appId: "1:152718589857:web:896512392d7ae7c3e995e0"
-        };
+    <!-- CONTENT -->
+    <div class="content">
+        <div class="view active" id="products-view">
+            <div class="section"><div id="products-list"></div></div>
+        </div>
 
-        const fApp = initializeApp(firebaseConfig);
-        const db = getDatabase(fApp);
-        const dbRef = ref(db, 'shared-shopping-list');
+        <div class="view" id="categories-view">
+            <div id="categories-list"></div>
+        </div>
 
-        const CATALOG = [
-            // OBST & GEMÜSE (W)
-            { name: "Erdbeeren", category: "Obst & Gemüse", side: "W", icon: "🍓" },
-            { name: "Heidelbeeren", category: "Obst & Gemüse", side: "W", icon: "🫐" },
-            { name: "Himbeeren", category: "Obst & Gemüse", side: "W", icon: "🍒" },
-            { name: "Brokkoli", category: "Obst & Gemüse", side: "W", icon: "🥦" },
-            { name: "Champignons", category: "Obst & Gemüse", side: "W", icon: "🍄" },
-            { name: "Karfiol", category: "Obst & Gemüse", side: "W", icon: "🥦" },
-            { name: "Lauch", category: "Obst & Gemüse", side: "W", icon: "🧅" },
-            { name: "Blattsalat", category: "Obst & Gemüse", side: "W", icon: "🥬" },
-            { name: "Eisbergsalat", category: "Obst & Gemüse", side: "W", icon: "🥬" },
-            { name: "Vogerlsalat", category: "Obst & Gemüse", side: "W", icon: "🥬" },
-            { name: "Babyblattspinat", category: "Obst & Gemüse", side: "W", icon: "🍃" },
-            { name: "Orangen", category: "Obst & Gemüse", side: "W", icon: "🍊" },
-            { name: "Mandarinen", category: "Obst & Gemüse", side: "W", icon: "🍊" },
-            { name: "Zitronen", category: "Obst & Gemüse", side: "W", icon: "🍋" },
-            { name: "Trauben", category: "Obst & Gemüse", side: "W", icon: "🍇" },
-            { name: "Avocado", category: "Obst & Gemüse", side: "W", icon: "🥑" },
-            { name: "Kiwi", category: "Obst & Gemüse", side: "W", icon: "🥝" },
-            { name: "Mango", category: "Obst & Gemüse", side: "W", icon: "🥭" },
-            { name: "Äpfel", category: "Obst & Gemüse", side: "W", icon: "🍎" },
-            { name: "Bananen", category: "Obst & Gemüse", side: "W", icon: "🍌" },
-            { name: "Zwiebeln", category: "Obst & Gemüse", side: "W", icon: "🧅" },
-            { name: "Kartoffeln", category: "Obst & Gemüse", side: "W", icon: "🥔" },
-            { name: "Süßkartoffel", category: "Obst & Gemüse", side: "W", icon: "🍠" },
-            { name: "Ingwer", category: "Obst & Gemüse", side: "W", icon: "🫚" },
-            { name: "Knoblauch", category: "Obst & Gemüse", side: "W", icon: "🧄" },
-            { name: "Rote Rüben Frisch", category: "Obst & Gemüse", side: "W", icon: "🥔" },
-            { name: "Rote Rüben Vorgekocht", category: "Obst & Gemüse", side: "W", icon: "🥔" },
-            { name: "Karotten", category: "Obst & Gemüse", side: "W", icon: "🥕" },
-            { name: "Gurken", category: "Obst & Gemüse", side: "W", icon: "🥒" },
-            { name: "Paprika", category: "Obst & Gemüse", side: "W", icon: "🫑" },
-            { name: "Melanzani", category: "Obst & Gemüse", side: "W", icon: "🍆" },
-            { name: "Zucchini", category: "Obst & Gemüse", side: "W", icon: "🥒" },
-            { name: "Tomaten", category: "Obst & Gemüse", side: "W", icon: "🍅" },
-            { name: "Cocktailtomaten", category: "Obst & Gemüse", side: "W", icon: "🍅" },
-            // OBST & GEMÜSE (O - Birnen waren O in deiner Liste)
-            { name: "Birnen", category: "Obst & Gemüse", side: "O", icon: "🍐" },
-
-            // BACKWAREN (W)
-            { name: "Brot", category: "Backwaren", side: "W", icon: "🍞" },
-            { name: "Semmeln", category: "Backwaren", side: "W", icon: "🥯" },
-            { name: "Zopf", category: "Backwaren", side: "W", icon: "🍞" },
-            { name: "Wraps", category: "Backwaren", side: "W", icon: "🌯" },
-
-            // VORRAT (O)
-            { name: "Kokosmilch", category: "Vorratsschrank", side: "O", icon: "🥥" },
-            { name: "Walnusskerne", category: "Vorratsschrank", side: "O", icon: "🥜" },
-            { name: "Cashewkerne", category: "Vorratsschrank", side: "O", icon: "🥜" },
-            { name: "Haferflocken grob", category: "Vorratsschrank", side: "O", icon: "🥣" },
-            { name: "Haferflocken fein", category: "Vorratsschrank", side: "O", icon: "🥣" },
-            { name: "Müsli", category: "Vorratsschrank", side: "O", icon: "🥣" },
-            { name: "Toastbrot", category: "Vorratsschrank", side: "O", icon: "🍞" },
-            { name: "Honig", category: "Vorratsschrank", side: "O", icon: "🍯" },
-            { name: "Honig Quetschi", category: "Vorratsschrank", side: "O", icon: "🍯" },
-            { name: "Kirschmarmelade", category: "Vorratsschrank", side: "O", icon: "🍒" },
-            { name: "Marillenmarmelade", category: "Vorratsschrank", side: "O", icon: "🍑" },
-            { name: "Powidelmarmelade", category: "Vorratsschrank", side: "O", icon: "🍯" },
-            { name: "Erdbeermarmelade", category: "Vorratsschrank", side: "O", icon: "🍓" },
-            { name: "Himbeermarmelade", category: "Vorratsschrank", side: "O", icon: "🍓" },
-            { name: "Heidelbeermarmelade", category: "Vorratsschrank", side: "O", icon: "🫐" },
-            { name: "Kräutertee", category: "Vorratsschrank", side: "O", icon: "🍵" },
-            { name: "Früchtetee", category: "Vorratsschrank", side: "O", icon: "🍵" },
-            { name: "Kaffee", category: "Vorratsschrank", side: "O", icon: "☕" },
-            { name: "Weizenvollkornmehl", category: "Vorratsschrank", side: "O", icon: "🌾" },
-            { name: "Roggenmehl", category: "Vorratsschrank", side: "O", icon: "🌾" },
-            { name: "Dinkelmehl", category: "Vorratsschrank", side: "O", icon: "🌾" },
-            { name: "Weizenmehl", category: "Vorratsschrank", side: "O", icon: "🌾" },
-            { name: "Dinkelvollkornmehl", category: "Vorratsschrank", side: "O", icon: "🌾" },
-            { name: "Weizengrieß", category: "Vorratsschrank", side: "O", icon: "🌾" },
-            { name: "Maisgrieß", category: "Vorratsschrank", side: "O", icon: "🌾" },
-            { name: "Zucker", category: "Vorratsschrank", side: "O", icon: "🍚" },
-            { name: "Rohrzucker", category: "Vorratsschrank", side: "O", icon: "🍚" },
-            { name: "Olivenöl", category: "Vorratsschrank", side: "O", icon: "🧴" },
-            { name: "Sonneblumenöl", category: "Vorratsschrank", side: "O", icon: "🧴" },
-            { name: "Rapsöl", category: "Vorratsschrank", side: "O", icon: "🧴" },
-            { name: "Apfelessig", category: "Vorratsschrank", side: "O", icon: "🍾" },
-            { name: "Balsamicoessig", category: "Vorratsschrank", side: "O", icon: "🍾" },
-            { name: "Kochschokolade", category: "Vorratsschrank", side: "O", icon: "🍫" },
-            { name: "Vanillepudding", category: "Vorratsschrank", side: "O", icon: "🍮" },
-            { name: "Schokopudding", category: "Vorratsschrank", side: "O", icon: "🍮" },
-            { name: "Rosinen", category: "Vorratsschrank", side: "O", icon: "🍇" },
-            { name: "Trockenhefe", category: "Vorratsschrank", side: "O", icon: "🍞" },
-            { name: "Vanillezucker", category: "Vorratsschrank", side: "O", icon: "🥡" },
-            { name: "Staubzucker", category: "Vorratsschrank", side: "O", icon: "🍚" },
-            { name: "Knödelbrot", category: "Vorratsschrank", side: "O", icon: "🍞" },
-            { name: "Eier", category: "Vorratsschrank", side: "O", icon: "🥚" },
-            { name: "Salz", category: "Vorratsschrank", side: "O", icon: "🧂" },
-            { name: "Pfeffer", category: "Vorratsschrank", side: "O", icon: "🧂" },
-            { name: "Currypulver", category: "Vorratsschrank", side: "O", icon: "🍛" },
-            { name: "Paprikapulver", category: "Vorratsschrank", side: "O", icon: "🌶️" },
-            { name: "Muskat", category: "Vorratsschrank", side: "O", icon: "🌰" },
-            { name: "Zimt", category: "Vorratsschrank", side: "O", icon: "🪵" },
-            { name: "Gewürze", category: "Vorratsschrank", side: "O", icon: "🌿" },
-            { name: "Tomatenstücke (Dose)", category: "Vorratsschrank", side: "O", icon: "🥫" },
-            { name: "Dosenbohnen", category: "Vorratsschrank", side: "O", icon: "🥫" },
-            { name: "Dosenlinsen", category: "Vorratsschrank", side: "O", icon: "🥫" },
-            { name: "Dosenkichererbsen", category: "Vorratsschrank", side: "O", icon: "🥫" },
-            { name: "Mais im Glas", category: "Vorratsschrank", side: "O", icon: "🌽" },
-            { name: "Tomatensauce", category: "Vorratsschrank", side: "O", icon: "🥫" },
-            { name: "Spaghetti", category: "Vorratsschrank", side: "O", icon: "🍝" },
-            { name: "Vollkornspaghetti", category: "Vorratsschrank", side: "O", icon: "🍝" },
-            { name: "Fussili / Spiralnudeln", category: "Vorratsschrank", side: "O", icon: "🍝" },
-            { name: "Basmatireis / Reis", category: "Vorratsschrank", side: "O", icon: "🍚" },
-
-            // SÜSSIGKEITEN (W)
-            { name: "Müsliriegel", category: "Süßigkeiten", side: "W", icon: "🍫" },
-            { name: "Vollmilchschokolade", category: "Süßigkeiten", side: "W", icon: "🍫" },
-            { name: "Zartbitterschokolade", category: "Süßigkeiten", side: "W", icon: "🍫" },
-            { name: "Chips", category: "Süßigkeiten", side: "W", icon: "🥨" },
-            { name: "Kekse", category: "Süßigkeiten", side: "W", icon: "🍪" },
-            { name: "Gummibärchen", category: "Süßigkeiten", side: "W", icon: "🐻" },
-
-            // GETRÄNKE (O)
-            { name: "Wein", category: "Getränke", side: "O", icon: "🍷" },
-            { name: "Bier", category: "Getränke", side: "O", icon: "🍺" },
-            { name: "Mineralwasser", category: "Getränke", side: "O", icon: "💧" },
-            { name: "Sirup", category: "Getränke", side: "O", icon: "🥤" },
-            { name: "Cola", category: "Getränke", side: "O", icon: "🥤" },
-            { name: "Apfelsaft", category: "Getränke", side: "O", icon: "🧃" },
-
-            // HAUSHALT (O)
-            { name: "Shampoo", category: "Haushalt", side: "O", icon: "🧴" },
-            { name: "Bodylotion", category: "Haushalt", side: "O", icon: "🧴" },
-            { name: "Deo", category: "Haushalt", side: "O", icon: "🧊" },
-            { name: "Taschentücher", category: "Haushalt", side: "O", icon: "🤧" },
-            { name: "Zahnpasta", category: "Haushalt", side: "O", icon: "🪥" },
-            { name: "Zahnbürste", category: "Haushalt", side: "O", icon: "🪥" },
-            { name: "Geschirrspülertabs", category: "Haushalt", side: "O", icon: "🧼" },
-            { name: "Spülmittel", category: "Haushalt", side: "O", icon: "🧼" },
-            { name: "Waschmittel", category: "Haushalt", side: "O", icon: "🧺" },
-            { name: "Klopapier", category: "Haushalt", side: "O", icon: "🧻" },
-            { name: "Küchenrolle", category: "Haushalt", side: "O", icon: "🧻" },
-            { name: "Müllbeutel", category: "Haushalt", side: "O", icon: "🗑️" },
-
-            // KÜHLUNG (O)
-            { name: "Faschiertes", category: "Kühlung", side: "O", icon: "🥩" },
-            { name: "Hühnerfleisch", category: "Kühlung", side: "O", icon: "🍗" },
-            { name: "Hefe", category: "Kühlung", side: "O", icon: "🍞" },
-            { name: "Gnocchi frisch", category: "Kühlung", side: "O", icon: "🥟" },
-            { name: "Käse", category: "Kühlung", side: "O", icon: "🧀" },
-            { name: "Topfen", category: "Kühlung", side: "O", icon: "🥛" },
-            { name: "Frischkäse", category: "Kühlung", side: "O", icon: "🥯" },
-            { name: "Fruchtjoghurt", category: "Kühlung", side: "O", icon: "🥛" },
-            { name: "Joghurt", category: "Kühlung", side: "O", icon: "🥛" },
-            { name: "Sahne", category: "Kühlung", side: "O", icon: "🥛" },
-            { name: "Creme Fraiche", category: "Kühlung", side: "O", icon: "🥛" },
-            { name: "Sauerrahm", category: "Kühlung", side: "O", icon: "🥛" },
-            { name: "Butter", category: "Kühlung", side: "O", icon: "🧈" },
-            { name: "Milch", category: "Kühlung", side: "O", icon: "🥛" },
-
-            // TIEFKÜHL (O)
-            { name: "Vanilleeis", category: "Tiefkühl", side: "O", icon: "🍦" },
-            { name: "Tiefkühlhimbeeren", category: "Tiefkühl", side: "O", icon: "🍒" },
-            { name: "Tiefkühlbeeren", category: "Tiefkühl", side: "O", icon: "🍒" },
-            { name: "Tiefkühlblattspinat", category: "Tiefkühl", side: "O", icon: "🧊" },
-            { name: "Tiefkühlcremespinat", category: "Tiefkühl", side: "O", icon: "🧊" },
-            { name: "Tiefkühlgemüse", category: "Tiefkühl", side: "O", icon: "❄️" },
-            { name: "Tiefkühlpizza", category: "Tiefkühl", side: "O", icon: "🍕" },
-            { name: "Pommes", category: "Tiefkühl", side: "O", icon: "🍟" },
-            { name: "Süßkartoffelpommes", category: "Tiefkühl", side: "O", icon: "🍟" },
-            { name: "Tiefkühlerbsen", category: "Tiefkühl", side: "O", icon: "🫛" },
-            { name: "Tiefkühlkarfiol", category: "Tiefkühl", side: "O", icon: "❄️" },
-            { name: "Tiefkühlbrokkoli", category: "Tiefkühl", side: "O", icon: "🥦" },
-
-            // KASSA
-            { name: "Batterien", category: "Kassa", side: "O", icon: "🔋" }
-        ];
-
-        window.app = {
-            cart: {}, searchTerm: '', activeTab: 'all',
-
-            init: function() {
-                // Echtzeit-Überwachung der Cloud-Daten
-                onValue(dbRef, (snapshot) => {
-                    this.cart = snapshot.val() || {};
-                    this.refreshCurrentView();
-                });
-            },
-
-            saveToCloud: function() {
-                set(dbRef, this.cart);
-            },
-
-            // NEUE FUNKTION: ALLES LÖSCHEN
-            clearCart: function() {
-                if(confirm("Möchtest du wirklich die gesamte Einkaufsliste leeren?")) {
-                    set(dbRef, {}); // Leeres Objekt an Firebase senden
-                }
-            },
-
-            updateQty: function(name, delta) {
-                if (!this.cart[name]) this.cart[name] = { qty: 0, checked: false };
-                this.cart[name].qty += delta;
-                if (this.cart[name].qty <= 0) delete this.cart[name];
-                this.saveToCloud();
-            },
-
-            toggleCheck: function(name) {
-                if (this.cart[name]) {
-                    this.cart[name].checked = !this.cart[name].checked;
-                    this.saveToCloud();
-                }
-            },
-
-            switchTab: function(tab) {
-                this.activeTab = tab;
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.onclick.toString().includes(tab)));
-                document.querySelectorAll('.view-section').forEach(s => s.classList.toggle('active', s.id === 'view-' + tab));
-                
-                // Footer Buttons nur im Tab "Einkaufen" (shop) anzeigen
-                const footer = document.getElementById('shop-footer');
-                if(tab === 'shop') footer.classList.add('visible');
-                else footer.classList.remove('visible');
-
-                this.refreshCurrentView();
-            },
-
-            handleSearch: function() {
-                this.searchTerm = document.getElementById('search-input').value.toLowerCase();
-                this.refreshCurrentView();
-            },
-
-            refreshCurrentView: function() {
-                if (this.activeTab === 'all') this.renderGrid();
-                if (this.activeTab === 'cats') this.renderCats();
-                if (this.activeTab === 'shop') this.renderShop();
-            },
-
-            renderGrid: function() {
-                const filtered = CATALOG.filter(p => p.name.toLowerCase().includes(this.searchTerm));
-                document.getElementById('grid-container').innerHTML = filtered.map(p => this.createCard(p)).join('');
-            },
-
-            renderCats: function() {
-                const container = document.getElementById('cat-list-container');
-                container.innerHTML = '';
-                const cats = [...new Set(CATALOG.map(p => p.category))];
-                cats.forEach(cat => {
-                    const items = CATALOG.filter(p => p.category === cat && p.name.toLowerCase().includes(this.searchTerm));
-                    if (items.length > 0) {
-                        container.innerHTML += `<div class="cat-title">${cat}</div><div class="product-grid">${items.map(p => this.createCard(p)).join('')}</div>`;
-                    }
-                });
-            },
-
-            createCard: function(p) {
-                const qty = this.cart[p.name]?.qty || 0;
-                return `
-                <div class="product-card ${qty > 0 ? 'in-cart' : ''}">
-                    <div onclick="app.updateQty('${p.name}', 1)">
-                        <span class="prod-icon">${p.icon}</span>
-                        <span class="prod-name">${p.name}</span>
+        <div class="view" id="shopping-view">
+            <div class="stats-bar">
+                <div class="stats-row">
+                    <div class="stat">
+                        <span class="stat-val" id="statTotal">0</span>
+                        <span class="stat-lbl">Artikel</span>
                     </div>
-                    <div class="controls">
-                        <button class="btn-ctrl" onclick="app.updateQty('${p.name}', -1)">-</button>
-                        <span>${qty || ''}</span>
-                        <button class="btn-ctrl btn-plus" onclick="app.updateQty('${p.name}', 1)">+</button>
+                    <div class="stat">
+                        <span class="stat-val" id="statDone">0</span>
+                        <span class="stat-lbl">Erledigt</span>
                     </div>
-                </div>`;
-            },
-
-            renderShop: function() {
-                const container = document.getElementById('shopping-list-container');
-                const items = CATALOG.filter(p => this.cart[p.name]).map(p => ({...p, ...this.cart[p.name]}));
-                if (items.length === 0) { container.innerHTML = "Liste ist leer."; return; }
-                container.innerHTML = items.map(item => `
-                    <div class="shopping-list-item ${item.checked ? 'checked' : ''}">
-                        <div style="display:flex; align-items:center; gap:10px; width:100%;" onclick="app.toggleCheck('${item.name}')">
-                            <span style="font-size:1.5rem">${item.checked ? '☑️' : '⬜'}</span>
-                            <div style="flex:1">
-                                <span style="display:block; font-weight:bold;">${item.name}</span>
-                                <span style="font-size:0.8rem; color:#666;">${item.side} | ${item.category}</span>
-                            </div>
-                        </div>
-                        <span style="font-weight:bold; font-size:1.2rem;">${item.qty}x</span>
+                    <div class="stat">
+                        <span class="stat-val" id="statPct">0%</span>
+                        <span class="stat-lbl">Fortschritt</span>
                     </div>
-                `).join('');
-                this.currentItems = items;
-            },
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="section"><div id="shopping-list"></div></div>
+        </div>
+    </div>
 
-            exportPDF: function() {
-                if(!this.currentItems || this.currentItems.length === 0) {
-                    alert("Liste ist leer!"); return;
-                }
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                doc.setFontSize(20);
-                doc.text("Einkaufsliste", 10, 15);
-                
-                doc.setFontSize(12);
-                let y = 30;
-                this.currentItems.forEach((item, i) => {
-                    if (y > 280) { doc.addPage(); y = 20; }
-                    doc.text(`[ ]  ${item.qty}x ${item.name} (${item.side})`, 10, y);
-                    y += 10;
-                });
-                doc.save("Einkauf.pdf");
+    <!-- FABs -->
+    <div class="fabs">
+        <button class="fab fab-pdf" id="pdfBtn" title="PDF Export">📄</button>
+        <button class="fab fab-clear" id="clearBtn" title="Liste leeren">🗑️</button>
+    </div>
+
+</div>
+
+<!-- CLEAR MODAL -->
+<div class="modal-bg" id="clearModal">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <div class="modal-title">Liste leeren?</div>
+        <div class="modal-text">Alle Artikel werden aus der Einkaufsliste entfernt. Diese Aktion kann nicht rückgängig gemacht werden.</div>
+        <div class="modal-btns">
+            <button class="btn btn-cancel" id="cancelClear">Abbrechen</button>
+            <button class="btn btn-danger" id="confirmClear">Leeren</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBDchXMOrJO3Qy9yQISP87vOeE7vZU5yD4",
+    authDomain: "einkaufsliste-746a1.firebaseapp.com",
+    databaseURL: "https://einkaufsliste-746a1-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "einkaufsliste-746a1",
+    storageBucket: "einkaufsliste-746a1.firebasestorage.app",
+    messagingSenderId: "152718589857",
+    appId: "1:152718589857:web:896512392d7ae7c3e995e0"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getDatabase(firebaseApp);
+
+const CATALOG = [
+    { name: "Erdbeeren", category: "Obst & Gemüse", icon: "🍓" },
+    { name: "Heidelbeeren", category: "Obst & Gemüse", icon: "🫐" },
+    { name: "Himbeeren", category: "Obst & Gemüse", icon: "🍒" },
+    { name: "Brokkoli", category: "Obst & Gemüse", icon: "🥦" },
+    { name: "Champignons", category: "Obst & Gemüse", icon: "🍄" },
+    { name: "Karfiol", category: "Obst & Gemüse", icon: "🥦" },
+    { name: "Lauch", category: "Obst & Gemüse", icon: "🧅" },
+    { name: "Blattsalat", category: "Obst & Gemüse", icon: "🥬" },
+    { name: "Eisbergsalat", category: "Obst & Gemüse", icon: "🥬" },
+    { name: "Vogerlsalat", category: "Obst & Gemüse", icon: "🥬" },
+    { name: "Babyblattspinat", category: "Obst & Gemüse", icon: "🍃" },
+    { name: "Orangen", category: "Obst & Gemüse", icon: "🍊" },
+    { name: "Mandarinen", category: "Obst & Gemüse", icon: "🍊" },
+    { name: "Zitronen", category: "Obst & Gemüse", icon: "🍋" },
+    { name: "Trauben", category: "Obst & Gemüse", icon: "🍇" },
+    { name: "Avokado", category: "Obst & Gemüse", icon: "🥑" },
+    { name: "Kiwi", category: "Obst & Gemüse", icon: "🥝" },
+    { name: "Mango", category: "Obst & Gemüse", icon: "🥭" },
+    { name: "Birnen", category: "Obst & Gemüse", icon: "🍐" },
+    { name: "Äpfel", category: "Obst & Gemüse", icon: "🍎" },
+    { name: "Bananen", category: "Obst & Gemüse", icon: "🍌" },
+    { name: "Zwiebeln", category: "Obst & Gemüse", icon: "🧅" },
+    { name: "Kartoffeln", category: "Obst & Gemüse", icon: "🥔" },
+    { name: "Süßkartoffel", category: "Obst & Gemüse", icon: "🍠" },
+    { name: "Ingwer", category: "Obst & Gemüse", icon: "🫚" },
+    { name: "Knoblauch", category: "Obst & Gemüse", icon: "🧄" },
+    { name: "Rote Rüben Frisch", category: "Obst & Gemüse", icon: "🥔" },
+    { name: "Rote Rüben Vorgekocht", category: "Obst & Gemüse", icon: "🥔" },
+    { name: "Karotten", category: "Obst & Gemüse", icon: "🥕" },
+    { name: "Gurken", category: "Obst & Gemüse", icon: "🥒" },
+    { name: "Paprika", category: "Obst & Gemüse", icon: "🫑" },
+    { name: "Melanzani", category: "Obst & Gemüse", icon: "🍆" },
+    { name: "Zuchini", category: "Obst & Gemüse", icon: "🥒" },
+    { name: "Tomaten", category: "Obst & Gemüse", icon: "🍅" },
+    { name: "Cocktailtomaten", category: "Obst & Gemüse", icon: "🍅" },
+    { name: "Kokosmilch", category: "Vorratsschrank", icon: "🥥" },
+    { name: "Walnusskerne", category: "Vorratsschrank", icon: "🥜" },
+    { name: "Cashewkerne", category: "Vorratsschrank", icon: "🥜" },
+    { name: "Haferflocken grob", category: "Vorratsschrank", icon: "🥣" },
+    { name: "Haferflocken fein", category: "Vorratsschrank", icon: "🥣" },
+    { name: "Müsli", category: "Vorratsschrank", icon: "🥣" },
+    { name: "Toastbrot", category: "Vorratsschrank", icon: "🍞" },
+    { name: "Kirschmarmelade", category: "Vorratsschrank", icon: "🍒" },
+    { name: "Marillenmarmelade", category: "Vorratsschrank", icon: "🍑" },
+    { name: "Powidelmarmelade", category: "Vorratsschrank", icon: "🍯" },
+    { name: "Erdbeermarmelade", category: "Vorratsschrank", icon: "🍓" },
+    { name: "Himbeermarmelade", category: "Vorratsschrank", icon: "🍓" },
+    { name: "Heidelbeermarmelade", category: "Vorratsschrank", icon: "🫐" },
+    { name: "Honig", category: "Vorratsschrank", icon: "🍯" },
+    { name: "Honig Quetschi", category: "Vorratsschrank", icon: "🍯" },
+    { name: "Kräutertee", category: "Vorratsschrank", icon: "🍵" },
+    { name: "Früchtetee", category: "Vorratsschrank", icon: "🍵" },
+    { name: "Kaffee", category: "Vorratsschrank", icon: "☕" },
+    { name: "Dosenbohnen", category: "Vorratsschrank", icon: "🥫" },
+    { name: "Dosenlinsen", category: "Vorratsschrank", icon: "🥫" },
+    { name: "Dosenkichererbsen", category: "Vorratsschrank", icon: "🥫" },
+    { name: "Mais im Glas", category: "Vorratsschrank", icon: "🌽" },
+    { name: "Weizenvollkornmehl", category: "Vorratsschrank", icon: "🌾" },
+    { name: "Roggenmehl", category: "Vorratsschrank", icon: "🌾" },
+    { name: "Dinkelmehl", category: "Vorratsschrank", icon: "🌾" },
+    { name: "Weizenmehl", category: "Vorratsschrank", icon: "🌾" },
+    { name: "Dinkelvollkornmehl", category: "Vorratsschrank", icon: "🌾" },
+    { name: "Weizengrieß", category: "Vorratsschrank", icon: "🌾" },
+    { name: "Maisgrieß", category: "Vorratsschrank", icon: "🌾" },
+    { name: "Zucker", category: "Vorratsschrank", icon: "🍚" },
+    { name: "Rohrzucker", category: "Vorratsschrank", icon: "🍚" },
+    { name: "Olivenöl", category: "Vorratsschrank", icon: "🧴" },
+    { name: "Sonneblumenöl", category: "Vorratsschrank", icon: "🧴" },
+    { name: "Rapsöl", category: "Vorratsschrank", icon: "🧴" },
+    { name: "Apfelessig", category: "Vorratsschrank", icon: "🍾" },
+    { name: "Balsamicoessig", category: "Vorratsschrank", icon: "🍾" },
+    { name: "Kochschokolade", category: "Vorratsschrank", icon: "🍫" },
+    { name: "Vanillepudding", category: "Vorratsschrank", icon: "🍮" },
+    { name: "Schokopudding", category: "Vorratsschrank", icon: "🍮" },
+    { name: "Rosinen", category: "Vorratsschrank", icon: "🍇" },
+    { name: "Trockenhefe", category: "Vorratsschrank", icon: "🍞" },
+    { name: "Vanillezucker", category: "Vorratsschrank", icon: "🥡" },
+    { name: "Staubzucker", category: "Vorratsschrank", icon: "🍚" },
+    { name: "Knödelbrot", category: "Vorratsschrank", icon: "🍞" },
+    { name: "Eier", category: "Vorratsschrank", icon: "🥚" },
+    { name: "Salz", category: "Vorratsschrank", icon: "🧂" },
+    { name: "Pfeffer", category: "Vorratsschrank", icon: "🧂" },
+    { name: "Currypulver", category: "Vorratsschrank", icon: "🍛" },
+    { name: "Paprikapulver", category: "Vorratsschrank", icon: "🌶️" },
+    { name: "Muskat", category: "Vorratsschrank", icon: "🌰" },
+    { name: "Zimt", category: "Vorratsschrank", icon: "🪵" },
+    { name: "Gewürze", category: "Vorratsschrank", icon: "🌿" },
+    { name: "Tomatenstücke (Dose)", category: "Vorratsschrank", icon: "🥫" },
+    { name: "Thunfisch", category: "Vorratsschrank", icon: "🥫" },
+    { name: "Oliven", category: "Vorratsschrank", icon: "🫒" },
+    { name: "Tomatensauce", category: "Vorratsschrank", icon: "🥫" },
+    { name: "Spaghetti", category: "Vorratsschrank", icon: "🍝" },
+    { name: "Vollkornspaghetti", category: "Vorratsschrank", icon: "🍝" },
+    { name: "Fussili / Spiralnudeln", category: "Vorratsschrank", icon: "🍝" },
+    { name: "Basmatireis / Reis", category: "Vorratsschrank", icon: "🍚" },
+    { name: "Brot", category: "Backwaren", icon: "🥖" },
+    { name: "Semmeln", category: "Backwaren", icon: "🥖" },
+    { name: "Zopf", category: "Backwaren", icon: "🥖" },
+    { name: "Wraps", category: "Backwaren", icon: "🌯" },
+    { name: "Faschiertes", category: "Kühlung", icon: "🥩" },
+    { name: "Hühnerfleisch", category: "Kühlung", icon: "🍗" },
+    { name: "Hefe", category: "Kühlung", icon: "🍞" },
+    { name: "Gnocchi frisch", category: "Kühlung", icon: "🥟" },
+    { name: "Hirtenkäse", category: "Kühlung", icon: "🧀" },
+    { name: "Parmesan", category: "Kühlung", icon: "🧀" },
+    { name: "Pizzakäse", category: "Kühlung", icon: "🧀" },
+    { name: "Mozarella", category: "Kühlung", icon: "🧀" },
+    { name: "Steirischer Bergkäse", category: "Kühlung", icon: "🧀" },
+    { name: "Käsescheiben", category: "Kühlung", icon: "🧀" },
+    { name: "Topfen", category: "Kühlung", icon: "🥛" },
+    { name: "Frischkäse", category: "Kühlung", icon: "🥯" },
+    { name: "Fruchtjoghurt", category: "Kühlung", icon: "🥛" },
+    { name: "Joghurt", category: "Kühlung", icon: "🥛" },
+    { name: "Sahne", category: "Kühlung", icon: "🥛" },
+    { name: "Creme Fraiche", category: "Kühlung", icon: "🥛" },
+    { name: "Sauerrahm", category: "Kühlung", icon: "🥛" },
+    { name: "Butter", category: "Kühlung", icon: "🧈" },
+    { name: "Milch", category: "Kühlung", icon: "🥛" },
+    { name: "Vanilleeis", category: "Tiefkühl", icon: "🍦" },
+    { name: "Tiefkühlhimbeeren", category: "Tiefkühl", icon: "🧊" },
+    { name: "Tiefkühlbeeren", category: "Tiefkühl", icon: "🧊" },
+    { name: "Tiefkühlblattspinat", category: "Tiefkühl", icon: "🧊" },
+    { name: "Tiefkühlcremespinat", category: "Tiefkühl", icon: "🧊" },
+    { name: "Tiefkühlgemüse", category: "Tiefkühl", icon: "❄️" },
+    { name: "Tiefkühlpizza", category: "Tiefkühl", icon: "🍕" },
+    { name: "Pommes", category: "Tiefkühl", icon: "🍟" },
+    { name: "Süßkartoffelpommes", category: "Tiefkühl", icon: "🍟" },
+    { name: "Tiefkühlerbsen", category: "Tiefkühl", icon: "🫛" },
+    { name: "Tiefkühlkarfiol", category: "Tiefkühl", icon: "❄️" },
+    { name: "Tiefkühlbrokkoli", category: "Tiefkühl", icon: "🥦" },
+    { name: "Shampoo", category: "Haushalt", icon: "🧴" },
+    { name: "Bodylotion", category: "Haushalt", icon: "🧴" },
+    { name: "Deo", category: "Haushalt", icon: "🧊" },
+    { name: "Taschentücher", category: "Haushalt", icon: "🤧" },
+    { name: "Zahnpasta", category: "Haushalt", icon: "🪥" },
+    { name: "Zahnbürste", category: "Haushalt", icon: "🪥" },
+    { name: "Geschirrspülertabs", category: "Haushalt", icon: "🧼" },
+    { name: "Spülmittel", category: "Haushalt", icon: "🧼" },
+    { name: "Waschmittel", category: "Haushalt", icon: "🧺" },
+    { name: "Klopapier", category: "Haushalt", icon: "🧻" },
+    { name: "Küchenrolle", category: "Haushalt", icon: "🧻" },
+    { name: "Müllbeutel", category: "Haushalt", icon: "🗑️" },
+    { name: "Mineralwasser", category: "Getränke", icon: "💧" },
+    { name: "Sirup", category: "Getränke", icon: "🥤" },
+    { name: "Cola", category: "Getränke", icon: "🥤" },
+    { name: "Apfelsaft", category: "Getränke", icon: "🧃" },
+    { name: "Wein", category: "Getränke", icon: "🍷" },
+    { name: "Bier", category: "Getränke", icon: "🍺" },
+    { name: "Vollmilchschokolade", category: "Süßigkeiten", icon: "🍫" },
+    { name: "Zartbitterschokolade", category: "Süßigkeiten", icon: "🍫" },
+    { name: "Chips", category: "Süßigkeiten", icon: "🥨" },
+    { name: "Kekse", category: "Süßigkeiten", icon: "🍪" },
+    { name: "Gummibärchen", category: "Süßigkeiten", icon: "🐻" },
+    { name: "Müsliriegel", category: "Süßigkeiten", icon: "🍫" },
+];
+
+const CAT_STYLES = {
+    "Obst & Gemüse":  { cls: "cat-obst",     icon: "🌿" },
+    "Vorratsschrank": { cls: "cat-vorrat",    icon: "🏺" },
+    "Backwaren":      { cls: "cat-backwaren", icon: "🥐" },
+    "Kühlung":        { cls: "cat-kuhlung",   icon: "🧊" },
+    "Tiefkühl":       { cls: "cat-tiefkuhl",  icon: "❄️" },
+    "Haushalt":       { cls: "cat-haushalt",  icon: "🏠" },
+    "Getränke":       { cls: "cat-getrankke", icon: "🥤" },
+    "Süßigkeiten":    { cls: "cat-suss",      icon: "🍬" },
+};
+
+// ── STATE ──────────────────────────────────────────────
+let cart = {};
+let searchTerm = '';
+let activeView = 'products';
+let activeCat = '';
+let isDark = true;
+
+// ── FIREBASE ───────────────────────────────────────────
+const cartRef = ref(db, 'shoppingCart');
+onValue(cartRef, snap => {
+    cart = snap.val() || {};
+    render();
+    updateStats();
+    updateBadge();
+});
+
+function saveCart() {
+    set(cartRef, Object.keys(cart).length ? cart : null);
+}
+
+// ── RENDER HELPERS ─────────────────────────────────────
+function catCls(category) {
+    return CAT_STYLES[category]?.cls || 'cat-vorrat';
+}
+
+function catIcon(category) {
+    return CAT_STYLES[category]?.icon || '📦';
+}
+
+function productCard(product, showCheck = false) {
+    const item = cart[product.name];
+    const qty = item?.qty || 0;
+    const checked = item?.checked || false;
+    const inCart = qty > 0;
+
+    return `
+    <div class="product-card ${inCart ? 'in-cart' : ''} ${checked ? 'checked' : ''}" data-name="${product.name}">
+        <div class="icon-bubble ${catCls(product.category)}">${product.icon}</div>
+        <div class="product-info">
+            <div class="product-name">${product.name}</div>
+            <div class="product-sub">${product.category}</div>
+        </div>
+        ${showCheck ? `
+            <div class="check-box ${checked ? 'done' : ''}" data-check="${product.name}">
+                ${checked ? '✓' : ''}
+            </div>
+        ` : `
+            <div class="qty-wrap">
+                <button class="qty-btn minus" data-name="${product.name}" ${qty === 0 ? 'disabled' : ''}>−</button>
+                <span class="qty-val ${qty > 0 ? 'nonzero' : ''}">${qty}</span>
+                <button class="qty-btn plus" data-name="${product.name}">+</button>
+            </div>
+        `}
+    </div>`;
+}
+
+function filtered() {
+    let list = CATALOG;
+    if (searchTerm) list = list.filter(p =>
+        p.name.toLowerCase().includes(searchTerm) ||
+        p.category.toLowerCase().includes(searchTerm)
+    );
+    if (activeCat) list = list.filter(p => p.category === activeCat);
+    return list;
+}
+
+// ── RENDER VIEWS ───────────────────────────────────────
+function renderProducts() {
+    const list = filtered();
+    const el = document.getElementById('products-list');
+    if (!list.length) {
+        el.innerHTML = `<div class="empty"><div class="empty-emoji">🔍</div><div class="empty-text">Nichts gefunden</div><div class="empty-sub">Probiere einen anderen Suchbegriff</div></div>`;
+        return;
+    }
+    el.innerHTML = list.map(p => productCard(p)).join('');
+}
+
+function renderCategories() {
+    const list = filtered();
+    const groups = {};
+    list.forEach(p => { (groups[p.category] = groups[p.category] || []).push(p); });
+    const el = document.getElementById('categories-list');
+    if (!Object.keys(groups).length) {
+        el.innerHTML = `<div class="empty"><div class="empty-emoji">📦</div><div class="empty-text">Keine Kategorien</div></div>`;
+        return;
+    }
+    el.innerHTML = Object.entries(groups).map(([cat, prods]) => `
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon ${catCls(cat)}">${catIcon(cat)}</div>
+                <div class="section-title">${cat}</div>
+                <div class="section-count">${prods.length}</div>
+            </div>
+            ${prods.map(p => productCard(p)).join('')}
+        </div>
+    `).join('');
+}
+
+function renderShopping() {
+    const items = CATALOG
+        .filter(p => cart[p.name]?.qty > 0)
+        .map(p => ({ ...p, ...cart[p.name] }));
+
+    const el = document.getElementById('shopping-list');
+    if (!items.length) {
+        el.innerHTML = `<div class="empty"><div class="empty-emoji">🛒</div><div class="empty-text">Liste ist leer</div><div class="empty-sub">Füge Produkte im Tab "Produkte" hinzu</div></div>`;
+        return;
+    }
+
+    // Group by category in shopping view
+    const groups = {};
+    items.forEach(p => { (groups[p.category] = groups[p.category] || []).push(p); });
+    el.innerHTML = Object.entries(groups).map(([cat, prods]) => `
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon ${catCls(cat)}">${catIcon(cat)}</div>
+                <div class="section-title">${cat}</div>
+                <div class="section-count">${prods.length}</div>
+            </div>
+            ${prods.map(p => productCard(p, true)).join('')}
+        </div>
+    `).join('');
+}
+
+function render() {
+    renderProducts();
+    renderCategories();
+    renderShopping();
+    bindEvents();
+}
+
+function bindEvents() {
+    // Qty buttons
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            const name = btn.dataset.name;
+            const cur = cart[name]?.qty || 0;
+            if (btn.classList.contains('plus')) {
+                updateItem(name, cur + 1);
+            } else if (cur > 0) {
+                updateItem(name, cur - 1);
             }
-        };
+        });
+    });
 
-        app.init();
-    </script>
+    // Checkboxes
+    document.querySelectorAll('[data-check]').forEach(el => {
+        el.addEventListener('click', e => {
+            e.stopPropagation();
+            const name = el.dataset.check;
+            if (cart[name]) {
+                cart[name].checked = !cart[name].checked;
+                render();
+                updateStats();
+                saveCart();
+            }
+        });
+    });
+}
+
+function updateItem(name, qty) {
+    if (qty > 0) {
+        cart[name] = { qty, checked: cart[name]?.checked || false };
+    } else {
+        delete cart[name];
+    }
+    render();
+    updateStats();
+    updateBadge();
+    saveCart();
+}
+
+function updateStats() {
+    const items = Object.values(cart);
+    const total = items.length;
+    const done = items.filter(i => i.checked).length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statDone').textContent = done;
+    document.getElementById('statPct').textContent = `${pct}%`;
+    document.getElementById('progressFill').style.width = `${pct}%`;
+}
+
+function updateBadge() {
+    const n = Object.keys(cart).length;
+    const badge = document.getElementById('cartBadge');
+    if (n > 0) {
+        badge.style.display = 'flex';
+        badge.textContent = n > 99 ? '99+' : n;
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+// ── CHIPS ──────────────────────────────────────────────
+function buildChips() {
+    const cats = [...new Set(CATALOG.map(p => p.category))];
+    const wrap = document.getElementById('chipsWrap');
+    wrap.innerHTML = `<button class="chip active" data-cat="">Alle</button>` +
+        cats.map(c => `<button class="chip" data-cat="${c}">${catIcon(c)} ${c}</button>`).join('');
+
+    wrap.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            activeCat = chip.dataset.cat;
+            wrap.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            render();
+        });
+    });
+}
+
+// ── TABS ───────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        activeView = tab.dataset.view;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(`${activeView}-view`).classList.add('active');
+
+        // Show/hide chips only on products view
+        document.getElementById('chipsWrap').style.display =
+            activeView === 'products' ? 'flex' : 'none';
+    });
+});
+
+// ── SEARCH ─────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', e => {
+    searchTerm = e.target.value.toLowerCase().trim();
+    render();
+});
+
+// ── THEME ──────────────────────────────────────────────
+document.getElementById('themeBtn').addEventListener('click', () => {
+    isDark = !isDark;
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+});
+
+// ── CLEAR MODAL ────────────────────────────────────────
+document.getElementById('clearBtn').addEventListener('click', () => {
+    document.getElementById('clearModal').classList.add('open');
+});
+document.getElementById('cancelClear').addEventListener('click', () => {
+    document.getElementById('clearModal').classList.remove('open');
+});
+document.getElementById('confirmClear').addEventListener('click', () => {
+    cart = {};
+    render(); updateStats(); updateBadge();
+    remove(cartRef);
+    document.getElementById('clearModal').classList.remove('open');
+    showToast('🗑️ Liste geleert');
+});
+
+// Close modal on backdrop click
+document.getElementById('clearModal').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+});
+
+// ── CART BADGE → switch to shopping ────────────────────
+document.getElementById('cartIconBtn').addEventListener('click', () => {
+    document.querySelector('[data-view="shopping"]').click();
+});
+
+// ── PDF EXPORT ─────────────────────────────────────────
+document.getElementById('pdfBtn').addEventListener('click', () => {
+    const items = CATALOG.filter(p => cart[p.name]?.qty > 0).map(p => ({ ...p, ...cart[p.name] }));
+    if (!items.length) { showToast('⚠️ Liste ist leer!'); return; }
+
+    const lines = [`EINKAUFSLISTE`, `Stand: ${new Date().toLocaleDateString('de-AT')}`, ``, `─────────────────────────────`];
+    const groups = {};
+    items.forEach(p => { (groups[p.category] = groups[p.category] || []).push(p); });
+    Object.entries(groups).forEach(([cat, prods]) => {
+        lines.push(``, `▸ ${cat.toUpperCase()}`, ``);
+        prods.forEach(p => {
+            const status = p.checked ? '✓' : '○';
+            lines.push(`  ${status}  ${p.name}  (${p.qty}×)`);
+        });
+    });
+    lines.push(``, `─────────────────────────────`);
+    lines.push(`Gesamt: ${items.length} Artikel | Erledigt: ${items.filter(i=>i.checked).length}`);
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Einkaufsliste_${new Date().toISOString().slice(0,10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('📄 Export erfolgreich!');
+});
+
+// ── TOAST ──────────────────────────────────────────────
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── INIT ───────────────────────────────────────────────
+buildChips();
+render();
+</script>
 </body>
 </html>
