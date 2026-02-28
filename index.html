@@ -1,261 +1,324 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <title>🛒 Einkauf</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>🛒 Einkauf</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <style>
-    @media print {
-        * { margin:0; padding:0; box-sizing:border-box; }
-        html, body { width:210mm; font-family:'Helvetica Neue',Arial,sans-serif; color:#000; background:#fff; }
-        .app { display:none !important; }
-        .print-page { display:block !important; padding:16mm 14mm 12mm; }
-        .print-header { border-bottom:2.5px solid #000; padding-bottom:9px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:flex-end; }
-        .print-logo { font-size:21pt; font-weight:800; letter-spacing:-.5px; }
-        .print-meta { font-size:8pt; color:#555; text-align:right; line-height:1.7; }
-        .print-summary { display:flex; gap:16px; margin-bottom:16px; }
-        .print-summary-box { border:1px solid #ddd; border-radius:5px; padding:6px 14px; text-align:center; }
-        .print-summary-box strong { display:block; font-size:15pt; font-weight:800; line-height:1.2; }
-        .print-summary-box span { font-size:7.5pt; color:#777; text-transform:uppercase; letter-spacing:.5px; }
-        .print-cat-title { font-size:7pt; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:#555; border-top:1px solid #e0e0e0; padding:7px 0 4px; margin-top:13px; }
-        .print-cat-title:first-of-type { margin-top:0; border-top:none; }
-        table { width:100%; border-collapse:collapse; margin-top:3px; }
-        th { font-size:6.5pt; font-weight:700; letter-spacing:.7px; text-transform:uppercase; color:#999; border-bottom:1px solid #e8e8e8; padding:4px 6px; text-align:left; }
-        th.c-chk, th.c-qty { text-align:center; width:44px; }
-        td { font-size:9.5pt; padding:5.5px 6px; border-bottom:1px solid #f3f3f3; vertical-align:middle; }
-        td.c-icon { width:24px; padding-right:2px; font-size:13pt; }
-        td.c-chk, td.c-qty { text-align:center; font-weight:700; }
-        tr:last-child td { border-bottom:none; }
-        .chk-circle { display:inline-block; width:13px; height:13px; border:1.5px solid #bbb; border-radius:3px; vertical-align:middle; }
-        .chk-done { background:#111; border-color:#111; }
-        .print-footer { margin-top:20px; border-top:1px solid #e8e8e8; padding-top:7px; font-size:7pt; color:#aaa; display:flex; justify-content:space-between; }
-    }
-    @media screen { .print-page { display:none; } }
-    </style>
+<!-- ══════════════════════════════════ PRINT ══ -->
+<style>
+@media print {
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:210mm;font-family:'Helvetica Neue',Arial,sans-serif;color:#000;background:#fff;}
+  .app{display:none!important;}
+  .print-page{display:block!important;padding:16mm 14mm 12mm;}
+  .print-header{border-bottom:2.5px solid #000;padding-bottom:9px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:flex-end;}
+  .print-logo{font-size:21pt;font-weight:800;letter-spacing:-.5px;}
+  .print-meta{font-size:8pt;color:#555;text-align:right;line-height:1.7;}
+  .print-summary{display:flex;gap:16px;margin-bottom:16px;}
+  .print-summary-box{border:1px solid #ddd;border-radius:5px;padding:6px 14px;text-align:center;}
+  .print-summary-box strong{display:block;font-size:15pt;font-weight:800;line-height:1.2;}
+  .print-summary-box span{font-size:7.5pt;color:#777;text-transform:uppercase;letter-spacing:.5px;}
+  .print-cat-title{font-size:7pt;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#555;border-top:1px solid #e0e0e0;padding:7px 0 4px;margin-top:13px;}
+  .print-cat-title:first-of-type{margin-top:0;border-top:none;}
+  table{width:100%;border-collapse:collapse;margin-top:3px;}
+  th{font-size:6.5pt;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:#999;border-bottom:1px solid #e8e8e8;padding:4px 6px;text-align:left;}
+  th.c-chk,th.c-qty{text-align:center;width:44px;}
+  td{font-size:9.5pt;padding:5.5px 6px;border-bottom:1px solid #f3f3f3;vertical-align:middle;}
+  td.c-icon{width:24px;padding-right:2px;font-size:13pt;}
+  td.c-chk,td.c-qty{text-align:center;font-weight:700;}
+  tr:last-child td{border-bottom:none;}
+  .chk-circle{display:inline-block;width:13px;height:13px;border:1.5px solid #bbb;border-radius:3px;vertical-align:middle;}
+  .chk-done{background:#111;border-color:#111;}
+  .print-footer{margin-top:20px;border-top:1px solid #e8e8e8;padding-top:7px;font-size:7pt;color:#aaa;display:flex;justify-content:space-between;}
+}
+@media screen{.print-page{display:none;}}
+</style>
 
-    <style>
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
-    :root {
-        --accent:#16a34a; --accent2:#22c55e; --danger:#ef4444;
-        --bg:#f5f7fa; --bg2:#fff; --bg3:#eef0f4; --bg4:#e2e6ec;
-        --text:#111827; --text2:#4b5563; --text3:#9ca3af; --border:#e5e7eb;
-        --shadow:0 2px 12px rgba(0,0,0,.07); --shadow-lg:0 8px 32px rgba(0,0,0,.12);
-        --r:20px; --rsm:14px; --rxs:10px;
-        --tr:all .22s cubic-bezier(.4,0,.2,1); --sp:all .35s cubic-bezier(.34,1.56,.64,1);
-    }
-    body { font-family:'Sora',-apple-system,sans-serif; background:var(--bg); color:var(--text); height:100dvh; overflow:hidden; position:fixed; width:100%; }
-    .app { height:100dvh; display:flex; flex-direction:column; max-width:480px; margin:0 auto; background:var(--bg); overflow:hidden; }
+<!-- ══════════════════════════════════ APP ══ -->
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+:root{
+  --accent:#16a34a;--accent2:#22c55e;--danger:#ef4444;
+  --bg:#f5f7fa;--bg2:#fff;--bg3:#eef0f4;--bg4:#e2e6ec;
+  --text:#111827;--text2:#4b5563;--text3:#9ca3af;--border:#e5e7eb;
+  --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
+  --r:20px;--rsm:14px;--rxs:10px;
+  --tr:all .22s cubic-bezier(.4,0,.2,1);--sp:all .35s cubic-bezier(.34,1.56,.64,1);
+}
+body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(--text);height:100dvh;overflow:hidden;position:fixed;width:100%;}
+.app{height:100dvh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:var(--bg);overflow:hidden;}
 
-    /* HEADER */
-    .header { padding:14px 18px 12px; padding-top:calc(14px + env(safe-area-inset-top)); background:var(--bg2); border-bottom:1px solid var(--border); z-index:10; }
-    .header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:13px; }
-    .app-title { font-size:24px; font-weight:800; letter-spacing:-.5px; }
-    .app-title span { color:var(--accent); }
-    .icon-btn { width:40px; height:40px; border-radius:12px; border:1.5px solid var(--border); background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; transition:var(--tr); position:relative; }
-    .icon-btn:active { transform:scale(.9); }
-    .cart-badge { position:absolute; top:-5px; right:-5px; background:var(--accent); color:#fff; font-size:9px; font-weight:800; width:17px; height:17px; border-radius:50%; display:none; align-items:center; justify-content:center; border:2px solid var(--bg2); }
+/* ── HEADER ── */
+.header{padding:14px 18px 12px;padding-top:calc(14px + env(safe-area-inset-top));background:var(--bg2);border-bottom:1px solid var(--border);z-index:10;}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.app-title{font-size:24px;font-weight:800;letter-spacing:-.5px;}
+.app-title span{color:var(--accent);}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--border);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:var(--tr);position:relative;overflow:hidden;}
+.icon-btn:active{transform:scale(.9);}
+.cart-badge{position:absolute;top:-5px;right:-5px;background:var(--accent);color:#fff;font-size:9px;font-weight:800;width:17px;height:17px;border-radius:50%;display:none;align-items:center;justify-content:center;border:2px solid var(--bg2);}
 
-    /* SEARCH */
-    .search-wrap { position:relative; }
-    .search-icon-el { position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:15px; color:var(--text3); pointer-events:none; }
-    .search-input { width:100%; padding:12px 14px 12px 42px; background:var(--bg3); border:1.5px solid transparent; border-radius:var(--rsm); color:var(--text); font-family:'Sora',sans-serif; font-size:15px; outline:none; transition:var(--tr); }
-    .search-input:focus { border-color:var(--accent); background:#fff; }
-    .search-input::placeholder { color:var(--text3); }
+/* ── BADGE WOBBLE ── */
+@keyframes badgeWobble{
+  0%{transform:scale(1) rotate(0deg);}
+  20%{transform:scale(1.4) rotate(-12deg);}
+  40%{transform:scale(1.2) rotate(10deg);}
+  60%{transform:scale(1.3) rotate(-8deg);}
+  80%{transform:scale(1.1) rotate(5deg);}
+  100%{transform:scale(1) rotate(0deg);}
+}
+.cart-badge.wobble{animation:badgeWobble .5s cubic-bezier(.36,.07,.19,.97);}
 
-    /* CHIPS */
-    .chips-wrap { display:flex; gap:7px; padding:10px 18px 0; overflow-x:auto; scrollbar-width:none; background:var(--bg2); }
-    .chips-wrap::-webkit-scrollbar { display:none; }
-    .chip { flex-shrink:0; padding:6px 13px; border-radius:100px; border:1.5px solid var(--border); background:var(--bg3); color:var(--text2); font-family:'Sora',sans-serif; font-size:11.5px; font-weight:600; cursor:pointer; transition:var(--tr); white-space:nowrap; }
-    .chip.active { background:var(--accent); border-color:var(--accent); color:#fff; }
-    .chip:active { transform:scale(.94); }
+/* ── SEARCH ── */
+.search-wrap{position:relative;}
+.search-icon-el{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--text3);pointer-events:none;}
+.search-input{width:100%;padding:12px 14px 12px 42px;background:var(--bg3);border:1.5px solid transparent;border-radius:var(--rsm);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;outline:none;transition:var(--tr);}
+.search-input:focus{border-color:var(--accent);background:#fff;}
+.search-input::placeholder{color:var(--text3);}
 
-    /* TABS */
-    .tabs { display:flex; background:var(--bg2); border-bottom:1.5px solid var(--border); padding:0 8px; gap:2px; }
-    .tab { flex:1; padding:10px 4px; border:none; background:none; color:var(--text3); font-family:'Sora',sans-serif; font-size:11px; font-weight:700; cursor:pointer; transition:var(--tr); border-radius:var(--rxs); display:flex; flex-direction:column; align-items:center; gap:3px; position:relative; }
-    .tab .ti { font-size:19px; }
-    .tab.active { color:var(--accent); }
-    .tab.active::after { content:''; position:absolute; bottom:-2px; left:15%; right:15%; height:2.5px; border-radius:2px; background:var(--accent); }
-    .tab:active { transform:scale(.93); }
+/* ── CHIPS ── */
+.chips-wrap{display:flex;gap:7px;padding:10px 18px 0;overflow-x:auto;scrollbar-width:none;background:var(--bg2);}
+.chips-wrap::-webkit-scrollbar{display:none;}
+.chip{flex-shrink:0;padding:6px 13px;border-radius:100px;border:1.5px solid var(--border);background:var(--bg3);color:var(--text2);font-family:'Sora',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;transition:var(--tr);white-space:nowrap;}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.chip:active{transform:scale(.94);}
 
-    /* CONTENT */
-    .content { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:20px; scrollbar-width:none; }
-    .content::-webkit-scrollbar { display:none; }
-    .view { display:none; }
-    .view.active { display:block; animation:fadeUp .22s ease; }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+/* ── TABS ── */
+.tabs{display:flex;background:var(--bg2);border-bottom:1.5px solid var(--border);padding:0 8px;gap:2px;}
+.tab{flex:1;padding:10px 4px;border:none;background:none;color:var(--text3);font-family:'Sora',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:var(--tr);border-radius:var(--rxs);display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;}
+.tab .ti{font-size:19px;}
+.tab.active{color:var(--accent);}
+.tab.active::after{content:'';position:absolute;bottom:-2px;left:15%;right:15%;height:2.5px;border-radius:2px;background:var(--accent);}
+.tab:active{transform:scale(.93);}
 
-    /* SECTION */
-    .section { padding:0 14px; margin-bottom:4px; }
-    .section-header { padding:8px 4px 6px; display:flex; align-items:center; gap:8px; }
-    .section-icon { width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
-    .section-title { font-size:10.5px; font-weight:700; letter-spacing:.7px; text-transform:uppercase; color:var(--text3); }
-    .section-count { margin-left:auto; background:var(--bg3); color:var(--text3); font-size:10px; font-weight:700; padding:2px 7px; border-radius:100px; }
+/* ── CONTENT ── */
+.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px;scrollbar-width:none;}
+.content::-webkit-scrollbar{display:none;}
+.view{display:none;}
+.view.active{display:block;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-    /* PRODUCT CARD */
-    .product-card { display:flex; align-items:center; padding:11px 12px; background:#fff; border-radius:var(--rsm); margin-bottom:5px; border:1.5px solid transparent; transition:var(--tr); cursor:pointer; position:relative; overflow:hidden; }
-    .product-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:transparent; transition:var(--tr); }
-    .product-card.in-cart { border-color:rgba(22,163,74,.2); background:#f0fdf4; }
-    .product-card.in-cart::before { background:var(--accent); }
-    .product-card.checked { opacity:.42; }
-    .product-card:active { transform:scale(.98); }
-    .icon-bubble { width:42px; height:42px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:21px; margin-right:11px; flex-shrink:0; transition:var(--tr); }
-    .product-card.checked .icon-bubble { filter:grayscale(1); }
-    .cat-obst{background:rgba(251,146,60,.13)} .cat-vorrat{background:rgba(251,191,36,.13)} .cat-backwaren{background:rgba(180,83,9,.12)} .cat-kuhlung{background:rgba(59,130,246,.12)} .cat-tiefkuhl{background:rgba(99,102,241,.12)} .cat-haushalt{background:rgba(107,114,128,.12)} .cat-getranke{background:rgba(14,165,233,.12)} .cat-suss{background:rgba(236,72,153,.12)}
-    .product-info { flex:1; min-width:0; }
-    .product-name { font-size:14px; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .product-card.checked .product-name { text-decoration:line-through; color:var(--text3); }
-    .product-sub { font-size:11px; color:var(--text3); margin-top:1px; }
+/* ── GRID LAYOUT ── */
+.grid-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 14px 4px;}
+.section-grid{padding:0 14px 4px;}
+.section-header{padding:10px 4px 6px;display:flex;align-items:center;gap:8px;}
+.section-icon{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.section-title{font-size:10.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--text3);}
+.section-count{margin-left:auto;background:var(--bg3);color:var(--text3);font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;}
 
-    /* QTY */
-    .qty-wrap { display:flex; align-items:center; gap:5px; }
-    .qty-btn { width:29px; height:29px; border-radius:9px; border:1.5px solid var(--border); background:var(--bg3); color:var(--text); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; font-weight:700; transition:var(--sp); flex-shrink:0; }
-    .qty-btn.plus { border-color:var(--accent); background:rgba(22,163,74,.08); color:var(--accent); }
-    .qty-btn:active { transform:scale(.82); }
-    .qty-btn:disabled { opacity:.3; cursor:default; }
-    .qty-val { min-width:20px; text-align:center; font-size:14px; font-weight:700; }
-    .qty-val.nz { color:var(--accent); }
+/* ── GRID CARD ── */
+.grid-card{
+  display:flex;flex-direction:column;align-items:center;
+  padding:12px 8px 10px;
+  background:#fff;border-radius:16px;
+  border:1.5px solid transparent;
+  transition:var(--tr);cursor:pointer;
+  position:relative;overflow:hidden;
+  text-align:center;
+}
+.grid-card.in-cart{border-color:rgba(22,163,74,.25);background:#f0fdf4;}
+.grid-card.in-cart .g-icon{box-shadow:0 0 0 3px rgba(22,163,74,.15);}
+.grid-card:active{transform:scale(.96);}
 
-    /* CHECKBOX */
-    .check-box { width:26px; height:26px; border-radius:8px; border:2px solid var(--border); background:#fff; display:flex; align-items:center; justify-content:center; transition:var(--sp); cursor:pointer; flex-shrink:0; font-size:13px; }
-    .check-box.done { background:var(--accent); border-color:var(--accent); color:#fff; animation:cPop .35s cubic-bezier(.34,1.56,.64,1); }
-    @keyframes cPop { 0%{transform:scale(1)} 45%{transform:scale(1.28)} 100%{transform:scale(1)} }
+/* staggered entrance */
+.grid-card{animation:cardIn .3s ease both;}
+@keyframes cardIn{from{opacity:0;transform:scale(.88) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}
 
-    /* STATS */
-    .stats-bar { margin:12px 14px 6px; background:#fff; border-radius:var(--rsm); padding:14px 16px; border:1.5px solid var(--border); box-shadow:var(--shadow); }
-    .stats-row { display:flex; justify-content:space-between; margin-bottom:11px; }
-    .stat { text-align:center; }
-    .stat-val { font-size:22px; font-weight:800; color:var(--accent); display:block; }
-    .stat-lbl { font-size:9.5px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.5px; }
-    .progress-track { height:6px; background:var(--bg3); border-radius:100px; overflow:hidden; }
-    .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:100px; transition:width .5s cubic-bezier(.4,0,.2,1); }
+/* ── GRID CARD INTERNALS ── */
+.g-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:7px;transition:var(--tr);}
+.grid-card.in-cart .g-icon{transform:scale(1.05);}
+.g-name{font-size:11px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:7px;min-height:27px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;width:100%;}
 
-    /* 3D CART */
-    .cart3d-section { margin:0 14px 8px; background:#fff; border-radius:var(--rsm); padding:12px 14px 14px; border:1.5px solid var(--border); overflow:hidden; }
-    .cart3d-label { font-size:9.5px; font-weight:700; letter-spacing:.7px; text-transform:uppercase; color:var(--text3); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
-    .cart3d-label em { font-style:normal; font-size:13px; }
-    .cart3d-stage { position:relative; height:128px; }
-    /* cart SVG-like CSS drawing */
-    .c3-scene { position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:150px; height:100px; }
-    .c3-handle { position:absolute; top:0; left:50%; transform:translateX(-50%); width:66px; height:26px; border:3px solid #94a3b8; border-bottom:none; border-radius:22px 22px 0 0; }
-    .c3-basket { position:absolute; bottom:22px; left:50%; transform:translateX(-50%); width:126px; height:62px; background:linear-gradient(155deg,#f1f5f9,#e2e8f0); border:2.5px solid #94a3b8; border-radius:5px 5px 14px 14px; box-shadow:3px 4px 0 rgba(0,0,0,.08); display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:3px; padding:7px; overflow:hidden; }
-    .c3-bar { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); width:130px; height:3px; background:#94a3b8; border-radius:2px; }
-    .c3-leg { position:absolute; bottom:22px; width:2.5px; height:18px; background:#94a3b8; border-radius:1px; }
-    .c3-leg.l { left:18px; } .c3-leg.r { right:18px; }
-    .c3-wheel { position:absolute; bottom:2px; width:15px; height:15px; background:#475569; border-radius:50%; border:2.5px solid #334155; }
-    .c3-wheel.l { left:16px; } .c3-wheel.r { right:16px; }
-    .c3-item { font-size:15px; line-height:1; animation:popIn .3s cubic-bezier(.34,1.56,.64,1); }
-    @keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
-    .c3-empty-hint { font-size:11px; color:var(--text3); text-align:center; }
+/* ── QTY in grid ── */
+.qty-wrap{display:flex;align-items:center;gap:4px;}
+.qty-btn{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg3);color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700;transition:var(--sp);flex-shrink:0;}
+.qty-btn.plus{border-color:var(--accent);background:rgba(22,163,74,.08);color:var(--accent);}
+.qty-btn:active{transform:scale(.8);}
+.qty-btn:disabled{opacity:.28;cursor:default;}
+.qty-val{min-width:18px;text-align:center;font-size:13px;font-weight:800;}
+.qty-val.nz{color:var(--accent);}
 
-    /* FLYING EMOJI */
-    .fly-emoji { position:fixed; font-size:26px; z-index:9999; pointer-events:none; }
+/* ── QTY NUMBER BOUNCE ── */
+@keyframes numUp{0%{transform:translateY(0);opacity:1}40%{transform:translateY(-6px);opacity:.5}100%{transform:translateY(0);opacity:1}}
+@keyframes numDown{0%{transform:translateY(0);opacity:1}40%{transform:translateY(6px);opacity:.5}100%{transform:translateY(0);opacity:1}}
+.qty-val.bounce-up{animation:numUp .28s cubic-bezier(.34,1.56,.64,1);}
+.qty-val.bounce-down{animation:numDown .28s cubic-bezier(.34,1.56,.64,1);}
 
-    /* ACTION BUTTONS */
-    .shop-actions { display:flex; gap:8px; padding:6px 14px 4px; }
-    .action-btn { flex:1; padding:12px; border:none; border-radius:var(--rsm); font-family:'Sora',sans-serif; font-size:12.5px; font-weight:700; cursor:pointer; transition:var(--tr); display:flex; align-items:center; justify-content:center; gap:6px; }
-    .action-btn:active { transform:scale(.96); }
-    .action-print { background:#111; color:#fff; }
-    .action-clear { background:#fee2e2; color:var(--danger); }
+/* ── RIPPLE ── */
+.ripple{position:absolute;border-radius:50%;background:rgba(22,163,74,.25);transform:scale(0);animation:rippleAnim .55s linear;pointer-events:none;}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0;}}
 
-    /* EMPTY */
-    .empty { text-align:center; padding:55px 20px; }
-    .empty-emoji { font-size:52px; margin-bottom:14px; opacity:.3; }
-    .empty-text { font-size:15px; font-weight:700; color:var(--text3); }
-    .empty-sub { font-size:12px; color:var(--text3); margin-top:4px; opacity:.7; }
+/* ── CAT COLORS ── */
+.cat-obst{background:rgba(251,146,60,.13)}
+.cat-vorrat{background:rgba(251,191,36,.13)}
+.cat-backwaren{background:rgba(180,83,9,.12)}
+.cat-kuhlung{background:rgba(59,130,246,.12)}
+.cat-tiefkuhl{background:rgba(99,102,241,.12)}
+.cat-haushalt{background:rgba(107,114,128,.12)}
+.cat-getranke{background:rgba(14,165,233,.12)}
+.cat-suss{background:rgba(236,72,153,.12)}
 
-    /* MODAL */
-    .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); backdrop-filter:blur(3px); z-index:200; align-items:flex-end; justify-content:center; }
-    .modal-bg.open { display:flex; animation:fadeIn .18s ease; }
-    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-    .modal { background:var(--bg2); border-radius:24px 24px 0 0; padding:22px 20px; width:100%; max-width:480px; animation:slideUp .3s cubic-bezier(.34,1.56,.64,1); padding-bottom:calc(24px + env(safe-area-inset-bottom)); }
-    @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-    .modal-handle { width:36px; height:4px; background:var(--border); border-radius:100px; margin:-6px auto 16px; }
-    .modal-title { font-size:18px; font-weight:800; margin-bottom:6px; }
-    .modal-text { color:var(--text2); font-size:13.5px; margin-bottom:20px; }
-    .modal-btns { display:flex; gap:10px; }
-    .btn { flex:1; padding:13px; border:none; border-radius:var(--rsm); font-family:'Sora',sans-serif; font-size:13.5px; font-weight:700; cursor:pointer; transition:var(--tr); }
-    .btn:active { transform:scale(.96); }
-    .btn-cancel { background:var(--bg3); color:var(--text2); }
-    .btn-danger { background:var(--danger); color:#fff; }
+/* ── LIST CARD (shopping view) ── */
+.list-section{padding:0 14px;margin-bottom:4px;}
+.product-card{display:flex;align-items:center;padding:11px 12px;background:#fff;border-radius:var(--rsm);margin-bottom:5px;border:1.5px solid transparent;transition:var(--tr);cursor:pointer;position:relative;overflow:hidden;}
+.product-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:var(--tr);}
+.product-card.in-cart{border-color:rgba(22,163,74,.2);background:#f0fdf4;}
+.product-card.in-cart::before{background:var(--accent);}
+.product-card.checked{opacity:.42;}
+.product-card:active{transform:scale(.98);}
+.icon-bubble{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:21px;margin-right:11px;flex-shrink:0;transition:var(--tr);}
+.product-card.checked .icon-bubble{filter:grayscale(1);}
+.product-info{flex:1;min-width:0;}
+.product-name{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.product-card.checked .product-name{text-decoration:line-through;color:var(--text3);}
+.product-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.check-box{width:26px;height:26px;border-radius:8px;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;transition:var(--sp);cursor:pointer;flex-shrink:0;font-size:13px;}
+.check-box.done{background:var(--accent);border-color:var(--accent);color:#fff;animation:cPop .35s cubic-bezier(.34,1.56,.64,1);}
+@keyframes cPop{0%{transform:scale(1)}45%{transform:scale(1.28)}100%{transform:scale(1)}}
 
-    /* TOAST */
-    .toast { position:fixed; top:calc(16px + env(safe-area-inset-top)); left:50%; transform:translateX(-50%) translateY(-70px); background:#111; color:#fff; padding:10px 18px; border-radius:100px; font-size:12.5px; font-weight:600; z-index:300; transition:transform .4s cubic-bezier(.34,1.56,.64,1); white-space:nowrap; box-shadow:var(--shadow-lg); }
-    .toast.show { transform:translateX(-50%) translateY(0); }
-    </style>
+/* ── STATS ── */
+.stats-bar{margin:12px 14px 6px;background:#fff;border-radius:var(--rsm);padding:14px 16px;border:1.5px solid var(--border);box-shadow:var(--shadow);}
+.stats-row{display:flex;justify-content:space-between;margin-bottom:11px;}
+.stat{text-align:center;}
+.stat-val{font-size:22px;font-weight:800;color:var(--accent);display:block;}
+.stat-lbl{font-size:9.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;}
+.progress-track{height:6px;background:var(--bg3);border-radius:100px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+
+/* ── 3D CART ── */
+.cart3d-section{margin:0 14px 8px;background:#fff;border-radius:var(--rsm);padding:12px 14px 14px;border:1.5px solid var(--border);overflow:hidden;}
+.cart3d-label{font-size:9.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.cart3d-label em{font-style:normal;font-size:13px;}
+.cart3d-stage{position:relative;height:128px;}
+.c3-scene{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:150px;height:100px;}
+.c3-handle{position:absolute;top:0;left:50%;transform:translateX(-50%);width:66px;height:26px;border:3px solid #94a3b8;border-bottom:none;border-radius:22px 22px 0 0;}
+.c3-basket{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);width:126px;height:62px;background:linear-gradient(155deg,#f1f5f9,#e2e8f0);border:2.5px solid #94a3b8;border-radius:5px 5px 14px 14px;box-shadow:3px 4px 0 rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:3px;padding:7px;overflow:hidden;}
+.c3-bar{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:130px;height:3px;background:#94a3b8;border-radius:2px;}
+.c3-leg{position:absolute;bottom:22px;width:2.5px;height:18px;background:#94a3b8;border-radius:1px;}
+.c3-leg.l{left:18px}.c3-leg.r{right:18px}
+.c3-wheel{position:absolute;bottom:2px;width:15px;height:15px;background:#475569;border-radius:50%;border:2.5px solid #334155;}
+.c3-wheel.l{left:16px}.c3-wheel.r{right:16px}
+.c3-item{font-size:15px;line-height:1;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.c3-empty-hint{font-size:11px;color:var(--text3);text-align:center;}
+.fly-emoji{position:fixed;font-size:26px;z-index:9999;pointer-events:none;}
+
+/* ── ACTION BUTTONS ── */
+.shop-actions{display:flex;gap:8px;padding:6px 14px 4px;}
+.action-btn{flex:1;padding:12px;border:none;border-radius:var(--rsm);font-family:'Sora',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center;gap:6px;position:relative;overflow:hidden;}
+.action-btn:active{transform:scale(.96);}
+.action-print{background:#111;color:#fff;}
+.action-clear{background:#fee2e2;color:var(--danger);}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:55px 20px;}
+.empty-emoji{font-size:52px;margin-bottom:14px;opacity:.3;}
+.empty-text{font-size:15px;font-weight:700;color:var(--text3);}
+.empty-sub{font-size:12px;color:var(--text3);margin-top:4px;opacity:.7;}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(3px);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-bg.open{display:flex;animation:fadeIn .18s ease;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--bg2);border-radius:24px 24px 0 0;padding:22px 20px;width:100%;max-width:480px;animation:slideUp .3s cubic-bezier(.34,1.56,.64,1);padding-bottom:calc(24px + env(safe-area-inset-bottom));}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:100px;margin:-6px auto 16px;}
+.modal-title{font-size:18px;font-weight:800;margin-bottom:6px;}
+.modal-text{color:var(--text2);font-size:13.5px;margin-bottom:20px;}
+.modal-btns{display:flex;gap:10px;}
+.btn{flex:1;padding:13px;border:none;border-radius:var(--rsm);font-family:'Sora',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;transition:var(--tr);}
+.btn:active{transform:scale(.96);}
+.btn-cancel{background:var(--bg3);color:var(--text2);}
+.btn-danger{background:var(--danger);color:#fff;}
+
+/* ── TOAST ── */
+.toast{position:fixed;top:calc(16px + env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-70px);background:#111;color:#fff;padding:10px 18px;border-radius:100px;font-size:12.5px;font-weight:600;z-index:300;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:var(--shadow-lg);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ── CONFETTI CANVAS ── */
+#confettiCanvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;display:none;}
+</style>
 </head>
 <body>
 
 <div class="print-page" id="printPage"></div>
+<canvas id="confettiCanvas"></canvas>
 
 <div class="app">
-    <div class="header">
-        <div class="header-top">
-            <div class="app-title">Einkauf<span>.</span></div>
-            <div class="icon-btn" id="cartIconBtn">🛒<div class="cart-badge" id="cartBadge">0</div></div>
-        </div>
-        <div class="search-wrap">
-            <span class="search-icon-el">🔍</span>
-            <input type="search" class="search-input" id="searchInput" placeholder="Produkt suchen…" autocomplete="off">
-        </div>
+  <div class="header">
+    <div class="header-top">
+      <div class="app-title">Einkauf<span>.</span></div>
+      <div class="icon-btn" id="cartIconBtn">🛒<div class="cart-badge" id="cartBadge">0</div></div>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon-el">🔍</span>
+      <input type="search" class="search-input" id="searchInput" placeholder="Produkt suchen…" autocomplete="off">
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-view="products"><span class="ti">🏪</span>Produkte</button>
+    <button class="tab" data-view="categories"><span class="ti">📂</span>Kategorien</button>
+    <button class="tab" data-view="shopping"><span class="ti">✅</span>Einkaufen</button>
+  </div>
+
+  <div class="chips-wrap" id="chipsWrap"></div>
+
+  <div class="content">
+    <!-- PRODUCTS -->
+    <div class="view active" id="products-view">
+      <div class="grid-list" id="products-list"></div>
     </div>
 
-    <div class="tabs">
-        <button class="tab active" data-view="products"><span class="ti">🏪</span>Produkte</button>
-        <button class="tab" data-view="categories"><span class="ti">📂</span>Kategorien</button>
-        <button class="tab" data-view="shopping"><span class="ti">✅</span>Einkaufen</button>
+    <!-- CATEGORIES -->
+    <div class="view" id="categories-view">
+      <div id="categories-list"></div>
     </div>
 
-    <div class="chips-wrap" id="chipsWrap"></div>
-
-    <div class="content">
-        <div class="view active" id="products-view">
-            <div class="section"><div id="products-list"></div></div>
+    <!-- SHOPPING -->
+    <div class="view" id="shopping-view">
+      <div class="stats-bar">
+        <div class="stats-row">
+          <div class="stat"><span class="stat-val" id="statTotal">0</span><span class="stat-lbl">Artikel</span></div>
+          <div class="stat"><span class="stat-val" id="statDone">0</span><span class="stat-lbl">Erledigt</span></div>
+          <div class="stat"><span class="stat-val" id="statPct">0%</span><span class="stat-lbl">Fortschritt</span></div>
         </div>
-        <div class="view" id="categories-view"><div id="categories-list"></div></div>
-        <div class="view" id="shopping-view">
-            <div class="stats-bar">
-                <div class="stats-row">
-                    <div class="stat"><span class="stat-val" id="statTotal">0</span><span class="stat-lbl">Artikel</span></div>
-                    <div class="stat"><span class="stat-val" id="statDone">0</span><span class="stat-lbl">Erledigt</span></div>
-                    <div class="stat"><span class="stat-val" id="statPct">0%</span><span class="stat-lbl">Fortschritt</span></div>
-                </div>
-                <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-            </div>
-            <div class="shop-actions">
-                <button class="action-btn action-print" id="printBtn">🖨️ Drucken / PDF</button>
-                <button class="action-btn action-clear" id="clearBtn">🗑️ Alles löschen</button>
-            </div>
-            <div class="cart3d-section">
-                <div class="cart3d-label"><em>🛒</em> Virtueller Einkaufswagen</div>
-                <div class="cart3d-stage" id="cart3dStage">
-                    <div class="c3-scene">
-                        <div class="c3-handle"></div>
-                        <div class="c3-basket" id="c3Basket"><span class="c3-empty-hint">Hake Artikel ab ✔</span></div>
-                        <div class="c3-bar"></div>
-                        <div class="c3-leg l"></div><div class="c3-leg r"></div>
-                        <div class="c3-wheel l"></div><div class="c3-wheel r"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="section"><div id="shopping-list"></div></div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+      <div class="shop-actions">
+        <button class="action-btn action-print" id="printBtn">🖨️ Drucken / PDF</button>
+        <button class="action-btn action-clear" id="clearBtn">🗑️ Alles löschen</button>
+      </div>
+      <div class="cart3d-section">
+        <div class="cart3d-label"><em>🛒</em> Virtueller Einkaufswagen</div>
+        <div class="cart3d-stage" id="cart3dStage">
+          <div class="c3-scene">
+            <div class="c3-handle"></div>
+            <div class="c3-basket" id="c3Basket"><span class="c3-empty-hint">Hake Artikel ab ✔</span></div>
+            <div class="c3-bar"></div>
+            <div class="c3-leg l"></div><div class="c3-leg r"></div>
+            <div class="c3-wheel l"></div><div class="c3-wheel r"></div>
+          </div>
         </div>
+      </div>
+      <div class="list-section"><div id="shopping-list"></div></div>
     </div>
+  </div>
 </div>
 
 <div class="modal-bg" id="clearModal">
-    <div class="modal">
-        <div class="modal-handle"></div>
-        <div class="modal-title">Liste leeren?</div>
-        <div class="modal-text">Alle Artikel werden entfernt und Häkchen zurückgesetzt.</div>
-        <div class="modal-btns">
-            <button class="btn btn-cancel" id="cancelClear">Abbrechen</button>
-            <button class="btn btn-danger" id="confirmClear">Leeren</button>
-        </div>
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Liste leeren?</div>
+    <div class="modal-text">Alle Artikel werden entfernt und Häkchen zurückgesetzt.</div>
+    <div class="modal-btns">
+      <button class="btn btn-cancel" id="cancelClear">Abbrechen</button>
+      <button class="btn btn-danger" id="confirmClear">Leeren</button>
     </div>
+  </div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -264,422 +327,510 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 initializeApp({
-    apiKey:"AIzaSyAdnSN7JJmJKBKrjfu6_73kPkCrG1Ha1E4",
-    authDomain:"einkaufliste2-46cdf.firebaseapp.com",
-    databaseURL:"https://einkaufliste2-46cdf-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId:"einkaufliste2-46cdf",
-    storageBucket:"einkaufliste2-46cdf.firebasestorage.app",
-    messagingSenderId:"565024450733",
-    appId:"1:565024450733:web:bd75e3ca7de58d5cccbe24"
+  apiKey:"AIzaSyAdnSN7JJmJKBKrjfu6_73kPkCrG1Ha1E4",
+  authDomain:"einkaufliste2-46cdf.firebaseapp.com",
+  databaseURL:"https://einkaufliste2-46cdf-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"einkaufliste2-46cdf",
+  storageBucket:"einkaufliste2-46cdf.firebasestorage.app",
+  messagingSenderId:"565024450733",
+  appId:"1:565024450733:web:bd75e3ca7de58d5cccbe24"
 });
-const db = getDatabase();
-const cartRef = ref(db, 'shoppingCart');
+const db=getDatabase();
+const cartRef=ref(db,'shoppingCart');
 
-const CATALOG = [
-    {name:"Erdbeeren",category:"Obst & Gemüse",icon:"🍓"},
-    {name:"Heidelbeeren",category:"Obst & Gemüse",icon:"🫐"},
-    {name:"Himbeeren",category:"Obst & Gemüse",icon:"🍒"},
-    {name:"Brokkoli",category:"Obst & Gemüse",icon:"🥦"},
-    {name:"Champignons",category:"Obst & Gemüse",icon:"🍄"},
-    {name:"Karfiol",category:"Obst & Gemüse",icon:"🥦"},
-    {name:"Lauch",category:"Obst & Gemüse",icon:"🧅"},
-    {name:"Blattsalat",category:"Obst & Gemüse",icon:"🥬"},
-    {name:"Eisbergsalat",category:"Obst & Gemüse",icon:"🥬"},
-    {name:"Vogerlsalat",category:"Obst & Gemüse",icon:"🥬"},
-    {name:"Babyblattspinat",category:"Obst & Gemüse",icon:"🍃"},
-    {name:"Orangen",category:"Obst & Gemüse",icon:"🍊"},
-    {name:"Mandarinen",category:"Obst & Gemüse",icon:"🍊"},
-    {name:"Zitronen",category:"Obst & Gemüse",icon:"🍋"},
-    {name:"Trauben",category:"Obst & Gemüse",icon:"🍇"},
-    {name:"Avokado",category:"Obst & Gemüse",icon:"🥑"},
-    {name:"Kiwi",category:"Obst & Gemüse",icon:"🥝"},
-    {name:"Mango",category:"Obst & Gemüse",icon:"🥭"},
-    {name:"Birnen",category:"Obst & Gemüse",icon:"🍐"},
-    {name:"Äpfel",category:"Obst & Gemüse",icon:"🍎"},
-    {name:"Bananen",category:"Obst & Gemüse",icon:"🍌"},
-    {name:"Zwiebeln",category:"Obst & Gemüse",icon:"🧅"},
-    {name:"Kartoffeln",category:"Obst & Gemüse",icon:"🥔"},
-    {name:"Süßkartoffel",category:"Obst & Gemüse",icon:"🍠"},
-    {name:"Ingwer",category:"Obst & Gemüse",icon:"🫚"},
-    {name:"Knoblauch",category:"Obst & Gemüse",icon:"🧄"},
-    {name:"Rote Rüben Frisch",category:"Obst & Gemüse",icon:"🥔"},
-    {name:"Rote Rüben Vorgekocht",category:"Obst & Gemüse",icon:"🥔"},
-    {name:"Karotten",category:"Obst & Gemüse",icon:"🥕"},
-    {name:"Gurken",category:"Obst & Gemüse",icon:"🥒"},
-    {name:"Paprika",category:"Obst & Gemüse",icon:"🫑"},
-    {name:"Melanzani",category:"Obst & Gemüse",icon:"🍆"},
-    {name:"Zuchini",category:"Obst & Gemüse",icon:"🥒"},
-    {name:"Tomaten",category:"Obst & Gemüse",icon:"🍅"},
-    {name:"Cocktailtomaten",category:"Obst & Gemüse",icon:"🍅"},
-    {name:"Kokosmilch",category:"Vorratsschrank",icon:"🥥"},
-    {name:"Walnusskerne",category:"Vorratsschrank",icon:"🥜"},
-    {name:"Cashewkerne",category:"Vorratsschrank",icon:"🥜"},
-    {name:"Haferflocken grob",category:"Vorratsschrank",icon:"🥣"},
-    {name:"Haferflocken fein",category:"Vorratsschrank",icon:"🥣"},
-    {name:"Müsli",category:"Vorratsschrank",icon:"🥣"},
-    {name:"Toastbrot",category:"Vorratsschrank",icon:"🍞"},
-    {name:"Kirschmarmelade",category:"Vorratsschrank",icon:"🍒"},
-    {name:"Marillenmarmelade",category:"Vorratsschrank",icon:"🍑"},
-    {name:"Powidelmarmelade",category:"Vorratsschrank",icon:"🍯"},
-    {name:"Erdbeermarmelade",category:"Vorratsschrank",icon:"🍓"},
-    {name:"Himbeermarmelade",category:"Vorratsschrank",icon:"🍓"},
-    {name:"Heidelbeermarmelade",category:"Vorratsschrank",icon:"🫐"},
-    {name:"Honig",category:"Vorratsschrank",icon:"🍯"},
-    {name:"Honig Quetschi",category:"Vorratsschrank",icon:"🍯"},
-    {name:"Kräutertee",category:"Vorratsschrank",icon:"🍵"},
-    {name:"Früchtetee",category:"Vorratsschrank",icon:"🍵"},
-    {name:"Kaffee",category:"Vorratsschrank",icon:"☕"},
-    {name:"Dosenbohnen",category:"Vorratsschrank",icon:"🥫"},
-    {name:"Dosenlinsen",category:"Vorratsschrank",icon:"🥫"},
-    {name:"Dosenkichererbsen",category:"Vorratsschrank",icon:"🥫"},
-    {name:"Mais im Glas",category:"Vorratsschrank",icon:"🌽"},
-    {name:"Weizenvollkornmehl",category:"Vorratsschrank",icon:"🌾"},
-    {name:"Roggenmehl",category:"Vorratsschrank",icon:"🌾"},
-    {name:"Dinkelmehl",category:"Vorratsschrank",icon:"🌾"},
-    {name:"Weizenmehl",category:"Vorratsschrank",icon:"🌾"},
-    {name:"Dinkelvollkornmehl",category:"Vorratsschrank",icon:"🌾"},
-    {name:"Weizengrieß",category:"Vorratsschrank",icon:"🌾"},
-    {name:"Maisgrieß",category:"Vorratsschrank",icon:"🌾"},
-    {name:"Zucker",category:"Vorratsschrank",icon:"🍚"},
-    {name:"Rohrzucker",category:"Vorratsschrank",icon:"🍚"},
-    {name:"Olivenöl",category:"Vorratsschrank",icon:"🧴"},
-    {name:"Sonneblumenöl",category:"Vorratsschrank",icon:"🧴"},
-    {name:"Rapsöl",category:"Vorratsschrank",icon:"🧴"},
-    {name:"Apfelessig",category:"Vorratsschrank",icon:"🍾"},
-    {name:"Balsamicoessig",category:"Vorratsschrank",icon:"🍾"},
-    {name:"Kochschokolade",category:"Vorratsschrank",icon:"🍫"},
-    {name:"Vanillepudding",category:"Vorratsschrank",icon:"🍮"},
-    {name:"Schokopudding",category:"Vorratsschrank",icon:"🍮"},
-    {name:"Rosinen",category:"Vorratsschrank",icon:"🍇"},
-    {name:"Trockenhefe",category:"Vorratsschrank",icon:"🍞"},
-    {name:"Vanillezucker",category:"Vorratsschrank",icon:"🥡"},
-    {name:"Staubzucker",category:"Vorratsschrank",icon:"🍚"},
-    {name:"Knödelbrot",category:"Vorratsschrank",icon:"🍞"},
-    {name:"Eier",category:"Vorratsschrank",icon:"🥚"},
-    {name:"Salz",category:"Vorratsschrank",icon:"🧂"},
-    {name:"Pfeffer",category:"Vorratsschrank",icon:"🧂"},
-    {name:"Currypulver",category:"Vorratsschrank",icon:"🍛"},
-    {name:"Paprikapulver",category:"Vorratsschrank",icon:"🌶️"},
-    {name:"Muskat",category:"Vorratsschrank",icon:"🌰"},
-    {name:"Zimt",category:"Vorratsschrank",icon:"🪵"},
-    {name:"Gewürze",category:"Vorratsschrank",icon:"🌿"},
-    {name:"Tomatenstücke (Dose)",category:"Vorratsschrank",icon:"🥫"},
-    {name:"Thunfisch",category:"Vorratsschrank",icon:"🥫"},
-    {name:"Oliven",category:"Vorratsschrank",icon:"🫒"},
-    {name:"Tomatensauce",category:"Vorratsschrank",icon:"🥫"},
-    {name:"Spaghetti",category:"Vorratsschrank",icon:"🍝"},
-    {name:"Vollkornspaghetti",category:"Vorratsschrank",icon:"🍝"},
-    {name:"Fussili / Spiralnudeln",category:"Vorratsschrank",icon:"🍝"},
-    {name:"Basmatireis / Reis",category:"Vorratsschrank",icon:"🍚"},
-    {name:"Brot",category:"Backwaren",icon:"🥖"},
-    {name:"Semmeln",category:"Backwaren",icon:"🥖"},
-    {name:"Zopf",category:"Backwaren",icon:"🥖"},
-    {name:"Wraps",category:"Backwaren",icon:"🌯"},
-    {name:"Faschiertes",category:"Kühlung",icon:"🥩"},
-    {name:"Hühnerfleisch",category:"Kühlung",icon:"🍗"},
-    {name:"Hefe",category:"Kühlung",icon:"🍞"},
-    {name:"Gnocchi frisch",category:"Kühlung",icon:"🥟"},
-    {name:"Hirtenkäse",category:"Kühlung",icon:"🧀"},
-    {name:"Parmesan",category:"Kühlung",icon:"🧀"},
-    {name:"Pizzakäse",category:"Kühlung",icon:"🧀"},
-    {name:"Mozarella",category:"Kühlung",icon:"🧀"},
-    {name:"Steirischer Bergkäse",category:"Kühlung",icon:"🧀"},
-    {name:"Käsescheiben",category:"Kühlung",icon:"🧀"},
-    {name:"Topfen",category:"Kühlung",icon:"🥛"},
-    {name:"Frischkäse",category:"Kühlung",icon:"🥯"},
-    {name:"Fruchtjoghurt",category:"Kühlung",icon:"🥛"},
-    {name:"Joghurt",category:"Kühlung",icon:"🥛"},
-    {name:"Sahne",category:"Kühlung",icon:"🥛"},
-    {name:"Creme Fraiche",category:"Kühlung",icon:"🥛"},
-    {name:"Sauerrahm",category:"Kühlung",icon:"🥛"},
-    {name:"Butter",category:"Kühlung",icon:"🧈"},
-    {name:"Milch",category:"Kühlung",icon:"🥛"},
-    {name:"Vanilleeis",category:"Tiefkühl",icon:"🍦"},
-    {name:"Tiefkühlhimbeeren",category:"Tiefkühl",icon:"🧊"},
-    {name:"Tiefkühlbeeren",category:"Tiefkühl",icon:"🧊"},
-    {name:"Tiefkühlblattspinat",category:"Tiefkühl",icon:"🧊"},
-    {name:"Tiefkühlcremespinat",category:"Tiefkühl",icon:"🧊"},
-    {name:"Tiefkühlgemüse",category:"Tiefkühl",icon:"❄️"},
-    {name:"Tiefkühlpizza",category:"Tiefkühl",icon:"🍕"},
-    {name:"Pommes",category:"Tiefkühl",icon:"🍟"},
-    {name:"Süßkartoffelpommes",category:"Tiefkühl",icon:"🍟"},
-    {name:"Tiefkühlerbsen",category:"Tiefkühl",icon:"🫛"},
-    {name:"Tiefkühlkarfiol",category:"Tiefkühl",icon:"❄️"},
-    {name:"Tiefkühlbrokkoli",category:"Tiefkühl",icon:"🥦"},
-    {name:"Shampoo",category:"Haushalt",icon:"🧴"},
-    {name:"Bodylotion",category:"Haushalt",icon:"🧴"},
-    {name:"Deo",category:"Haushalt",icon:"🧊"},
-    {name:"Taschentücher",category:"Haushalt",icon:"🤧"},
-    {name:"Zahnpasta",category:"Haushalt",icon:"🪥"},
-    {name:"Zahnbürste",category:"Haushalt",icon:"🪥"},
-    {name:"Geschirrspülertabs",category:"Haushalt",icon:"🧼"},
-    {name:"Spülmittel",category:"Haushalt",icon:"🧼"},
-    {name:"Waschmittel",category:"Haushalt",icon:"🧺"},
-    {name:"Klopapier",category:"Haushalt",icon:"🧻"},
-    {name:"Küchenrolle",category:"Haushalt",icon:"🧻"},
-    {name:"Müllbeutel",category:"Haushalt",icon:"🗑️"},
-    {name:"Mineralwasser",category:"Getränke",icon:"💧"},
-    {name:"Sirup",category:"Getränke",icon:"🥤"},
-    {name:"Cola",category:"Getränke",icon:"🥤"},
-    {name:"Apfelsaft",category:"Getränke",icon:"🧃"},
-    {name:"Wein",category:"Getränke",icon:"🍷"},
-    {name:"Bier",category:"Getränke",icon:"🍺"},
-    {name:"Vollmilchschokolade",category:"Süßigkeiten",icon:"🍫"},
-    {name:"Zartbitterschokolade",category:"Süßigkeiten",icon:"🍫"},
-    {name:"Chips",category:"Süßigkeiten",icon:"🥨"},
-    {name:"Kekse",category:"Süßigkeiten",icon:"🍪"},
-    {name:"Gummibärchen",category:"Süßigkeiten",icon:"🐻"},
-    {name:"Müsliriegel",category:"Süßigkeiten",icon:"🍫"},
+/* ══════════════════════════════════════════════
+   CATALOG  –  icons reviewed & corrected
+══════════════════════════════════════════════ */
+const CATALOG=[
+  // Obst & Gemüse
+  {name:"Erdbeeren",           category:"Obst & Gemüse", icon:"🍓"},
+  {name:"Heidelbeeren",        category:"Obst & Gemüse", icon:"🫐"},
+  {name:"Himbeeren",           category:"Obst & Gemüse", icon:"🍒"},
+  {name:"Brokkoli",            category:"Obst & Gemüse", icon:"🥦"},
+  {name:"Champignons",         category:"Obst & Gemüse", icon:"🍄"},
+  {name:"Karfiol",             category:"Obst & Gemüse", icon:"🥦"},
+  {name:"Lauch",               category:"Obst & Gemüse", icon:"🌿"},
+  {name:"Blattsalat",          category:"Obst & Gemüse", icon:"🥬"},
+  {name:"Eisbergsalat",        category:"Obst & Gemüse", icon:"🥬"},
+  {name:"Vogerlsalat",         category:"Obst & Gemüse", icon:"🥬"},
+  {name:"Babyblattspinat",     category:"Obst & Gemüse", icon:"🍃"},
+  {name:"Orangen",             category:"Obst & Gemüse", icon:"🍊"},
+  {name:"Mandarinen",          category:"Obst & Gemüse", icon:"🍊"},
+  {name:"Zitronen",            category:"Obst & Gemüse", icon:"🍋"},
+  {name:"Trauben",             category:"Obst & Gemüse", icon:"🍇"},
+  {name:"Avokado",             category:"Obst & Gemüse", icon:"🥑"},
+  {name:"Kiwi",                category:"Obst & Gemüse", icon:"🥝"},
+  {name:"Mango",               category:"Obst & Gemüse", icon:"🥭"},
+  {name:"Birnen",              category:"Obst & Gemüse", icon:"🍐"},
+  {name:"Äpfel",               category:"Obst & Gemüse", icon:"🍎"},
+  {name:"Bananen",             category:"Obst & Gemüse", icon:"🍌"},
+  {name:"Zwiebeln",            category:"Obst & Gemüse", icon:"🧅"},
+  {name:"Kartoffeln",          category:"Obst & Gemüse", icon:"🥔"},
+  {name:"Süßkartoffel",        category:"Obst & Gemüse", icon:"🍠"},
+  {name:"Ingwer",              category:"Obst & Gemüse", icon:"🫚"},
+  {name:"Knoblauch",           category:"Obst & Gemüse", icon:"🧄"},
+  {name:"Rote Rüben Frisch",   category:"Obst & Gemüse", icon:"🟣"},
+  {name:"Rote Rüben Vorgekocht",category:"Obst & Gemüse",icon:"🟤"},
+  {name:"Karotten",            category:"Obst & Gemüse", icon:"🥕"},
+  {name:"Gurken",              category:"Obst & Gemüse", icon:"🥒"},
+  {name:"Paprika",             category:"Obst & Gemüse", icon:"🫑"},
+  {name:"Melanzani",           category:"Obst & Gemüse", icon:"🍆"},
+  {name:"Zuchini",             category:"Obst & Gemüse", icon:"🥒"},
+  {name:"Tomaten",             category:"Obst & Gemüse", icon:"🍅"},
+  {name:"Cocktailtomaten",     category:"Obst & Gemüse", icon:"🍅"},
+  // Vorratsschrank
+  {name:"Kokosmilch",          category:"Vorratsschrank", icon:"🥥"},
+  {name:"Walnusskerne",        category:"Vorratsschrank", icon:"🌰"},
+  {name:"Cashewkerne",         category:"Vorratsschrank", icon:"🥜"},
+  {name:"Haferflocken grob",   category:"Vorratsschrank", icon:"🥣"},
+  {name:"Haferflocken fein",   category:"Vorratsschrank", icon:"🥣"},
+  {name:"Müsli",               category:"Vorratsschrank", icon:"🥣"},
+  {name:"Toastbrot",           category:"Vorratsschrank", icon:"🍞"},
+  {name:"Kirschmarmelade",     category:"Vorratsschrank", icon:"🍒"},
+  {name:"Marillenmarmelade",   category:"Vorratsschrank", icon:"🍑"},
+  {name:"Powidelmarmelade",    category:"Vorratsschrank", icon:"🍯"},
+  {name:"Erdbeermarmelade",    category:"Vorratsschrank", icon:"🍓"},
+  {name:"Himbeermarmelade",    category:"Vorratsschrank", icon:"🍒"},
+  {name:"Heidelbeermarmelade", category:"Vorratsschrank", icon:"🫐"},
+  {name:"Honig",               category:"Vorratsschrank", icon:"🍯"},
+  {name:"Honig Quetschi",      category:"Vorratsschrank", icon:"🍯"},
+  {name:"Kräutertee",          category:"Vorratsschrank", icon:"🍵"},
+  {name:"Früchtetee",          category:"Vorratsschrank", icon:"🍵"},
+  {name:"Kaffee",              category:"Vorratsschrank", icon:"☕"},
+  {name:"Dosenbohnen",         category:"Vorratsschrank", icon:"🥫"},
+  {name:"Dosenlinsen",         category:"Vorratsschrank", icon:"🥫"},
+  {name:"Dosenkichererbsen",   category:"Vorratsschrank", icon:"🥫"},
+  {name:"Mais im Glas",        category:"Vorratsschrank", icon:"🌽"},
+  {name:"Weizenvollkornmehl",  category:"Vorratsschrank", icon:"🌾"},
+  {name:"Roggenmehl",          category:"Vorratsschrank", icon:"🌾"},
+  {name:"Dinkelmehl",          category:"Vorratsschrank", icon:"🌾"},
+  {name:"Weizenmehl",          category:"Vorratsschrank", icon:"🌾"},
+  {name:"Dinkelvollkornmehl",  category:"Vorratsschrank", icon:"🌾"},
+  {name:"Weizengrieß",         category:"Vorratsschrank", icon:"🌾"},
+  {name:"Maisgrieß",           category:"Vorratsschrank", icon:"🌽"},
+  {name:"Zucker",              category:"Vorratsschrank", icon:"🧂"},
+  {name:"Rohrzucker",          category:"Vorratsschrank", icon:"🎋"},
+  {name:"Olivenöl",            category:"Vorratsschrank", icon:"🫙"},
+  {name:"Sonneblumenöl",       category:"Vorratsschrank", icon:"🫙"},
+  {name:"Rapsöl",              category:"Vorratsschrank", icon:"🫙"},
+  {name:"Apfelessig",          category:"Vorratsschrank", icon:"🍶"},
+  {name:"Balsamicoessig",      category:"Vorratsschrank", icon:"🍶"},
+  {name:"Kochschokolade",      category:"Vorratsschrank", icon:"🍫"},
+  {name:"Vanillepudding",      category:"Vorratsschrank", icon:"🍮"},
+  {name:"Schokopudding",       category:"Vorratsschrank", icon:"🍮"},
+  {name:"Rosinen",             category:"Vorratsschrank", icon:"🍇"},
+  {name:"Trockenhefe",         category:"Vorratsschrank", icon:"🫧"},
+  {name:"Vanillezucker",       category:"Vorratsschrank", icon:"🧁"},
+  {name:"Staubzucker",         category:"Vorratsschrank", icon:"🤍"},
+  {name:"Knödelbrot",          category:"Vorratsschrank", icon:"🍞"},
+  {name:"Eier",                category:"Vorratsschrank", icon:"🥚"},
+  {name:"Salz",                category:"Vorratsschrank", icon:"🧂"},
+  {name:"Pfeffer",             category:"Vorratsschrank", icon:"🫙"},
+  {name:"Currypulver",         category:"Vorratsschrank", icon:"🍛"},
+  {name:"Paprikapulver",       category:"Vorratsschrank", icon:"🌶️"},
+  {name:"Muskat",              category:"Vorratsschrank", icon:"🌰"},
+  {name:"Zimt",                category:"Vorratsschrank", icon:"🪵"},
+  {name:"Gewürze",             category:"Vorratsschrank", icon:"🌿"},
+  {name:"Tomatenstücke (Dose)",category:"Vorratsschrank", icon:"🥫"},
+  {name:"Thunfisch",           category:"Vorratsschrank", icon:"🐟"},
+  {name:"Oliven",              category:"Vorratsschrank", icon:"🫒"},
+  {name:"Tomatensauce",        category:"Vorratsschrank", icon:"🥫"},
+  {name:"Spaghetti",           category:"Vorratsschrank", icon:"🍝"},
+  {name:"Vollkornspaghetti",   category:"Vorratsschrank", icon:"🍝"},
+  {name:"Fussili / Spiralnudeln",category:"Vorratsschrank",icon:"🍝"},
+  {name:"Basmatireis / Reis",  category:"Vorratsschrank", icon:"🍚"},
+  // Backwaren
+  {name:"Brot",                category:"Backwaren", icon:"🥖"},
+  {name:"Semmeln",             category:"Backwaren", icon:"🥐"},
+  {name:"Zopf",                category:"Backwaren", icon:"🥖"},
+  {name:"Wraps",               category:"Backwaren", icon:"🌯"},
+  // Kühlung
+  {name:"Faschiertes",         category:"Kühlung", icon:"🥩"},
+  {name:"Hühnerfleisch",       category:"Kühlung", icon:"🍗"},
+  {name:"Hefe",                category:"Kühlung", icon:"🫧"},
+  {name:"Gnocchi frisch",      category:"Kühlung", icon:"🫘"},
+  {name:"Hirtenkäse",          category:"Kühlung", icon:"🧀"},
+  {name:"Parmesan",            category:"Kühlung", icon:"🧀"},
+  {name:"Pizzakäse",           category:"Kühlung", icon:"🧀"},
+  {name:"Mozarella",           category:"Kühlung", icon:"🧀"},
+  {name:"Steirischer Bergkäse",category:"Kühlung", icon:"🧀"},
+  {name:"Käsescheiben",        category:"Kühlung", icon:"🧀"},
+  {name:"Topfen",              category:"Kühlung", icon:"🥛"},
+  {name:"Frischkäse",          category:"Kühlung", icon:"🥛"},
+  {name:"Fruchtjoghurt",       category:"Kühlung", icon:"🍓"},
+  {name:"Joghurt",             category:"Kühlung", icon:"🥛"},
+  {name:"Sahne",               category:"Kühlung", icon:"🥛"},
+  {name:"Creme Fraiche",       category:"Kühlung", icon:"🥛"},
+  {name:"Sauerrahm",           category:"Kühlung", icon:"🥛"},
+  {name:"Butter",              category:"Kühlung", icon:"🧈"},
+  {name:"Milch",               category:"Kühlung", icon:"🥛"},
+  // Tiefkühl
+  {name:"Vanilleeis",          category:"Tiefkühl", icon:"🍦"},
+  {name:"Tiefkühlhimbeeren",   category:"Tiefkühl", icon:"🍒"},
+  {name:"Tiefkühlbeeren",      category:"Tiefkühl", icon:"🫐"},
+  {name:"Tiefkühlblattspinat", category:"Tiefkühl", icon:"🥬"},
+  {name:"Tiefkühlcremespinat", category:"Tiefkühl", icon:"🥬"},
+  {name:"Tiefkühlgemüse",      category:"Tiefkühl", icon:"🥦"},
+  {name:"Tiefkühlpizza",       category:"Tiefkühl", icon:"🍕"},
+  {name:"Pommes",              category:"Tiefkühl", icon:"🍟"},
+  {name:"Süßkartoffelpommes",  category:"Tiefkühl", icon:"🍠"},
+  {name:"Tiefkühlerbsen",      category:"Tiefkühl", icon:"🫛"},
+  {name:"Tiefkühlkarfiol",     category:"Tiefkühl", icon:"🥦"},
+  {name:"Tiefkühlbrokkoli",    category:"Tiefkühl", icon:"🥦"},
+  // Haushalt
+  {name:"Shampoo",             category:"Haushalt", icon:"🧴"},
+  {name:"Bodylotion",          category:"Haushalt", icon:"🧴"},
+  {name:"Deo",                 category:"Haushalt", icon:"🫧"},
+  {name:"Taschentücher",       category:"Haushalt", icon:"🤧"},
+  {name:"Zahnpasta",           category:"Haushalt", icon:"🪥"},
+  {name:"Zahnbürste",          category:"Haushalt", icon:"🪥"},
+  {name:"Geschirrspülertabs",  category:"Haushalt", icon:"🧼"},
+  {name:"Spülmittel",          category:"Haushalt", icon:"🧼"},
+  {name:"Waschmittel",         category:"Haushalt", icon:"🧺"},
+  {name:"Klopapier",           category:"Haushalt", icon:"🧻"},
+  {name:"Küchenrolle",         category:"Haushalt", icon:"🧻"},
+  {name:"Müllbeutel",          category:"Haushalt", icon:"🗑️"},
+  // Getränke
+  {name:"Mineralwasser",       category:"Getränke", icon:"💧"},
+  {name:"Sirup",               category:"Getränke", icon:"🧃"},
+  {name:"Cola",                category:"Getränke", icon:"🥤"},
+  {name:"Apfelsaft",           category:"Getränke", icon:"🍎"},
+  {name:"Wein",                category:"Getränke", icon:"🍷"},
+  {name:"Bier",                category:"Getränke", icon:"🍺"},
+  // Süßigkeiten
+  {name:"Vollmilchschokolade", category:"Süßigkeiten", icon:"🍫"},
+  {name:"Zartbitterschokolade",category:"Süßigkeiten", icon:"🍫"},
+  {name:"Chips",               category:"Süßigkeiten", icon:"🥨"},
+  {name:"Kekse",               category:"Süßigkeiten", icon:"🍪"},
+  {name:"Gummibärchen",        category:"Süßigkeiten", icon:"🐻"},
+  {name:"Müsliriegel",         category:"Süßigkeiten", icon:"🍫"},
 ];
 
-const CAT = {
-    "Obst & Gemüse": {cls:"cat-obst",     icon:"🌿"},
-    "Vorratsschrank":{cls:"cat-vorrat",    icon:"🏺"},
-    "Backwaren":     {cls:"cat-backwaren", icon:"🥐"},
-    "Kühlung":       {cls:"cat-kuhlung",   icon:"🧊"},
-    "Tiefkühl":      {cls:"cat-tiefkuhl",  icon:"❄️"},
-    "Haushalt":      {cls:"cat-haushalt",  icon:"🏠"},
-    "Getränke":      {cls:"cat-getranke",  icon:"🥤"},
-    "Süßigkeiten":   {cls:"cat-suss",      icon:"🍬"},
+const CAT={
+  "Obst & Gemüse": {cls:"cat-obst",     icon:"🌿"},
+  "Vorratsschrank":{cls:"cat-vorrat",    icon:"🏺"},
+  "Backwaren":     {cls:"cat-backwaren", icon:"🥐"},
+  "Kühlung":       {cls:"cat-kuhlung",   icon:"🧊"},
+  "Tiefkühl":      {cls:"cat-tiefkuhl",  icon:"❄️"},
+  "Haushalt":      {cls:"cat-haushalt",  icon:"🏠"},
+  "Getränke":      {cls:"cat-getranke",  icon:"🥤"},
+  "Süßigkeiten":   {cls:"cat-suss",      icon:"🍬"},
 };
 
 let cart={}, search='', activeCat='', activeView='products';
+let prevTotal=0; // track for confetti trigger
 
-onValue(cartRef, snap => {
-    cart = snap.val()||{};
-    render(); updateStats(); updateBadge(); syncCart();
+onValue(cartRef, snap=>{
+  cart=snap.val()||{};
+  render(); updateStats(); updateBadge(); syncCart();
 });
+function save(){ set(cartRef, Object.keys(cart).length?cart:null); }
 
-function save(){ set(cartRef, Object.keys(cart).length ? cart : null); }
-
-function updateItem(name,qty){
-    if(qty>0) cart[name]={qty, checked:cart[name]?.checked||false};
-    else delete cart[name];
-    render(); updateStats(); updateBadge(); syncCart(); save();
+/* ══ ITEM UPDATE ══ */
+function updateItem(name,qty,direction){
+  if(qty>0) cart[name]={qty, checked:cart[name]?.checked||false};
+  else delete cart[name];
+  render(); updateStats(); updateBadge(direction); syncCart(); save();
 }
 
 function toggleCheck(name, el){
-    if(!cart[name]) return;
-    const wasChecked = cart[name].checked;
-    cart[name].checked = !wasChecked;
-    if(!wasChecked && el){ flyToCart(CATALOG.find(p=>p.name===name)?.icon||'🛒', el); }
-    render(); updateStats(); syncCart(); save();
+  if(!cart[name]) return;
+  const was=cart[name].checked;
+  cart[name].checked=!was;
+  if(!was&&el) flyToCart(CATALOG.find(p=>p.name===name)?.icon||'🛒', el);
+  render(); updateStats(); syncCart(); save();
+  checkConfetti();
 }
 
-/* ── 3D CART SYNC ───────────────────────────────── */
+/* ══ CHECK FOR 100% CONFETTI ══ */
+function checkConfetti(){
+  const vals=Object.values(cart);
+  if(vals.length>0 && vals.every(i=>i.checked)){
+    launchConfetti();
+    showToast('🎉 Alles erledigt!');
+  }
+}
+
+/* ══ CONFETTI ══ */
+function launchConfetti(){
+  const canvas=document.getElementById('confettiCanvas');
+  canvas.style.display='block';
+  const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const pieces=[];
+  const colors=['#16a34a','#22c55e','#facc15','#f87171','#60a5fa','#c084fc','#fb923c'];
+  for(let i=0;i<120;i++){
+    pieces.push({
+      x:Math.random()*canvas.width, y:-10,
+      w:6+Math.random()*8, h:10+Math.random()*8,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      vx:(Math.random()-0.5)*6, vy:2+Math.random()*5,
+      rot:Math.random()*360, rotV:(Math.random()-0.5)*10,
+      opacity:1
+    });
+  }
+  let frame;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.12; p.rot+=p.rotV;
+      if(p.y>canvas.height*0.7) p.opacity-=0.025;
+      ctx.save();ctx.globalAlpha=Math.max(0,p.opacity);
+      ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle=p.color;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if(pieces.some(p=>p.opacity>0)) frame=requestAnimationFrame(draw);
+    else{canvas.style.display='none';ctx.clearRect(0,0,canvas.width,canvas.height);}
+  }
+  draw();
+  setTimeout(()=>{cancelAnimationFrame(frame);canvas.style.display='none';},3500);
+}
+
+/* ══ 3D CART ══ */
 function syncCart(){
-    const basket = document.getElementById('c3Basket');
-    if(!basket) return;
-    const checked = CATALOG.filter(p=>cart[p.name]?.checked);
-    if(!checked.length){
-        basket.innerHTML='<span class="c3-empty-hint">Hake Artikel ab ✔</span>';
-        return;
-    }
-    basket.innerHTML = checked.slice(-14).map(p=>`<span class="c3-item">${p.icon}</span>`).join('');
+  const basket=document.getElementById('c3Basket');
+  if(!basket) return;
+  const checked=CATALOG.filter(p=>cart[p.name]?.checked);
+  if(!checked.length){ basket.innerHTML='<span class="c3-empty-hint">Hake Artikel ab ✔</span>'; return; }
+  basket.innerHTML=checked.slice(-14).map(p=>`<span class="c3-item">${p.icon}</span>`).join('');
 }
 
-function flyToCart(emoji, fromEl){
-    const stage = document.getElementById('cart3dStage');
-    if(!stage) return;
-    const fr = fromEl.getBoundingClientRect();
-    const sr = stage.getBoundingClientRect();
-    const tx = sr.left + sr.width/2;
-    const ty = sr.top  + sr.height*0.72;
-
-    const el = document.createElement('div');
-    el.className='fly-emoji';
-    el.textContent=emoji;
-    el.style.cssText=`left:${fr.left}px;top:${fr.top}px;position:fixed;font-size:26px;z-index:9999;pointer-events:none;`;
-    document.body.appendChild(el);
-
-    el.animate([
-        {left:fr.left+'px', top:fr.top+'px', fontSize:'26px', opacity:1, transform:'scale(1) rotate(0deg)'},
-        {left:((fr.left+tx)/2)+'px', top:(fr.top-40)+'px', fontSize:'20px', opacity:.9, transform:'scale(.8) rotate(-15deg)'},
-        {left:tx+'px', top:ty+'px', fontSize:'8px', opacity:0, transform:'scale(.1) rotate(-30deg)'}
-    ], {duration:680, easing:'cubic-bezier(.4,0,.8,.6)', fill:'forwards'}).onfinish=()=>el.remove();
+function flyToCart(emoji,fromEl){
+  const stage=document.getElementById('cart3dStage');
+  if(!stage) return;
+  const fr=fromEl.getBoundingClientRect();
+  const sr=stage.getBoundingClientRect();
+  const el=document.createElement('div');
+  el.className='fly-emoji'; el.textContent=emoji;
+  el.style.cssText=`left:${fr.left}px;top:${fr.top}px;position:fixed;font-size:26px;z-index:9999;pointer-events:none;`;
+  document.body.appendChild(el);
+  const tx=sr.left+sr.width/2, ty=sr.top+sr.height*.72;
+  el.animate([
+    {left:fr.left+'px',top:fr.top+'px',fontSize:'26px',opacity:1,transform:'scale(1) rotate(0deg)'},
+    {left:((fr.left+tx)/2)+'px',top:(fr.top-40)+'px',fontSize:'20px',opacity:.9,transform:'scale(.8) rotate(-15deg)'},
+    {left:tx+'px',top:ty+'px',fontSize:'8px',opacity:0,transform:'scale(.1) rotate(-30deg)'}
+  ],{duration:680,easing:'cubic-bezier(.4,0,.8,.6)',fill:'forwards'}).onfinish=()=>el.remove();
 }
 
-/* ── RENDER ─────────────────────────────────────── */
-const cc = c => CAT[c]?.cls||'cat-vorrat';
-const ci = c => CAT[c]?.icon||'📦';
+/* ══ RIPPLE ══ */
+function addRipple(el, e){
+  const rect=el.getBoundingClientRect();
+  const x=(e.clientX||rect.left+rect.width/2)-rect.left;
+  const y=(e.clientY||rect.top+rect.height/2)-rect.top;
+  const size=Math.max(rect.width,rect.height)*1.2;
+  const r=document.createElement('span');
+  r.className='ripple';
+  r.style.cssText=`width:${size}px;height:${size}px;left:${x-size/2}px;top:${y-size/2}px;`;
+  el.appendChild(r);
+  setTimeout(()=>r.remove(),600);
+}
 
-function card(p, check=false){
-    const it=cart[p.name], qty=it?.qty||0, done=it?.checked||false, inCart=qty>0;
-    return `<div class="product-card ${inCart?'in-cart':''} ${done?'checked':''}" data-name="${p.name}">
-        <div class="icon-bubble ${cc(p.category)}">${p.icon}</div>
-        <div class="product-info">
-            <div class="product-name">${p.name}</div>
-            <div class="product-sub">${p.category}${check?' · '+qty+'×':''}</div>
-        </div>
-        ${check
-            ? `<div class="check-box ${done?'done':''}" data-check="${p.name}">${done?'✓':''}</div>`
-            : `<div class="qty-wrap">
-                <button class="qty-btn minus" data-name="${p.name}" ${qty===0?'disabled':''}>−</button>
-                <span class="qty-val ${qty>0?'nz':''}">${qty}</span>
-                <button class="qty-btn plus" data-name="${p.name}">+</button>
-               </div>`
-        }
-    </div>`;
+/* ══ BADGE WOBBLE ══ */
+function updateBadge(direction){
+  const n=Object.keys(cart).length, b=document.getElementById('cartBadge');
+  b.style.display=n?'flex':'none'; b.textContent=n>99?'99+':n;
+  if(direction==='up'){
+    b.classList.remove('wobble');
+    void b.offsetWidth;
+    b.classList.add('wobble');
+    setTimeout(()=>b.classList.remove('wobble'),500);
+  }
+}
+
+/* ══ RENDER ══ */
+const cc=c=>CAT[c]?.cls||'cat-vorrat';
+const ci=c=>CAT[c]?.icon||'📦';
+
+function gridCard(p, idx){
+  const it=cart[p.name], qty=it?.qty||0, inCart=qty>0;
+  return `<div class="grid-card ${inCart?'in-cart':''}" data-name="${p.name}" style="animation-delay:${idx*30}ms">
+    <div class="g-icon ${cc(p.category)}">${p.icon}</div>
+    <div class="g-name">${p.name}</div>
+    <div class="qty-wrap">
+      <button class="qty-btn minus" data-name="${p.name}" ${qty===0?'disabled':''}>−</button>
+      <span class="qty-val ${qty>0?'nz':''}" id="qv-${p.name.replace(/\s/g,'_')}">${qty}</span>
+      <button class="qty-btn plus" data-name="${p.name}">+</button>
+    </div>
+  </div>`;
+}
+
+function listCard(p){
+  const it=cart[p.name], qty=it?.qty||0, done=it?.checked||false, inCart=qty>0;
+  return `<div class="product-card ${inCart?'in-cart':''} ${done?'checked':''}" data-name="${p.name}">
+    <div class="icon-bubble ${cc(p.category)}">${p.icon}</div>
+    <div class="product-info">
+      <div class="product-name">${p.name}</div>
+      <div class="product-sub">${p.category} · ${qty}×</div>
+    </div>
+    <div class="check-box ${done?'done':''}" data-check="${p.name}">${done?'✓':''}</div>
+  </div>`;
 }
 
 function filtered(){
-    let l=CATALOG;
-    if(search)    l=l.filter(p=>p.name.toLowerCase().includes(search)||p.category.toLowerCase().includes(search));
-    if(activeCat) l=l.filter(p=>p.category===activeCat);
-    return l;
+  let l=CATALOG;
+  if(search) l=l.filter(p=>p.name.toLowerCase().includes(search)||p.category.toLowerCase().includes(search));
+  if(activeCat) l=l.filter(p=>p.category===activeCat);
+  return l;
 }
 
 function renderProducts(){
-    const l=filtered(), el=document.getElementById('products-list');
-    el.innerHTML = l.length ? l.map(p=>card(p)).join('')
-        : `<div class="empty"><div class="empty-emoji">🔍</div><div class="empty-text">Nichts gefunden</div></div>`;
+  const l=filtered(), el=document.getElementById('products-list');
+  if(!l.length){ el.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-emoji">🔍</div><div class="empty-text">Nichts gefunden</div></div>`; return; }
+  el.innerHTML=l.map((p,i)=>gridCard(p,i)).join('');
 }
 
 function renderCategories(){
-    const l=filtered(), g={};
-    l.forEach(p=>(g[p.category]=g[p.category]||[]).push(p));
-    const el=document.getElementById('categories-list');
-    if(!Object.keys(g).length){el.innerHTML=`<div class="empty"><div class="empty-emoji">📦</div><div class="empty-text">Keine Kategorien</div></div>`;return;}
-    el.innerHTML=Object.entries(g).map(([cat,ps])=>`
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon ${cc(cat)}">${ci(cat)}</div>
-                <div class="section-title">${cat}</div>
-                <div class="section-count">${ps.length}</div>
-            </div>
-            ${ps.map(p=>card(p)).join('')}
-        </div>`).join('');
+  const l=filtered(), g={};
+  l.forEach(p=>(g[p.category]=g[p.category]||[]).push(p));
+  const el=document.getElementById('categories-list');
+  if(!Object.keys(g).length){ el.innerHTML=`<div class="empty"><div class="empty-emoji">📦</div><div class="empty-text">Keine Kategorien</div></div>`; return; }
+  let html=''; let globalIdx=0;
+  Object.entries(g).forEach(([cat,prods])=>{
+    html+=`<div class="section-grid">
+      <div class="section-header">
+        <div class="section-icon ${cc(cat)}">${ci(cat)}</div>
+        <div class="section-title">${cat}</div>
+        <div class="section-count">${prods.length}</div>
+      </div>
+      <div class="grid-list" style="padding:0 0 4px">
+        ${prods.map((p,i)=>gridCard(p, globalIdx++)).join('')}
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
 }
 
 function renderShopping(){
-    // ARRAY ORDER = correct supermarket order
-    const items = CATALOG.filter(p=>cart[p.name]?.qty>0);
-    const el = document.getElementById('shopping-list');
-    el.innerHTML = items.length ? items.map(p=>card(p,true)).join('')
-        : `<div class="empty"><div class="empty-emoji">🛒</div><div class="empty-text">Liste ist leer</div><div class="empty-sub">Produkte im Tab "Produkte" hinzufügen</div></div>`;
+  const items=CATALOG.filter(p=>cart[p.name]?.qty>0);
+  const el=document.getElementById('shopping-list');
+  el.innerHTML=items.length ? items.map(p=>listCard(p)).join('')
+    : `<div class="empty"><div class="empty-emoji">🛒</div><div class="empty-text">Liste ist leer</div><div class="empty-sub">Produkte im Tab "Produkte" hinzufügen</div></div>`;
 }
 
-function render(){
-    renderProducts(); renderCategories(); renderShopping(); bindEvents();
-}
+function render(){ renderProducts(); renderCategories(); renderShopping(); bindEvents(); }
 
 function bindEvents(){
-    document.querySelectorAll('.qty-btn').forEach(b=>{
-        b.addEventListener('click',e=>{
-            e.stopPropagation();
-            const n=b.dataset.name, cur=cart[n]?.qty||0;
-            updateItem(n, b.classList.contains('plus')?cur+1:Math.max(0,cur-1));
-        });
+  // Qty buttons
+  document.querySelectorAll('.qty-btn').forEach(b=>{
+    b.addEventListener('click',e=>{
+      e.stopPropagation();
+      const name=b.dataset.name, cur=cart[name]?.qty||0;
+      const isPlus=b.classList.contains('plus');
+      const newQty=isPlus?cur+1:Math.max(0,cur-1);
+
+      // bounce animation on the qty number
+      const id='qv-'+name.replace(/\s/g,'_');
+      const qEl=document.getElementById(id);
+      if(qEl){
+        qEl.classList.remove('bounce-up','bounce-down');
+        void qEl.offsetWidth;
+        qEl.classList.add(isPlus?'bounce-up':'bounce-down');
+      }
+      updateItem(name, newQty, isPlus?'up':null);
     });
-    document.querySelectorAll('[data-check]').forEach(el=>{
-        el.addEventListener('click',e=>{ e.stopPropagation(); toggleCheck(el.dataset.check, el); });
-    });
+  });
+
+  // Checkboxes (shopping view)
+  document.querySelectorAll('[data-check]').forEach(el=>{
+    el.addEventListener('click',e=>{ e.stopPropagation(); toggleCheck(el.dataset.check, el); });
+  });
+
+  // Ripple on grid cards & action buttons
+  document.querySelectorAll('.grid-card, .action-btn').forEach(el=>{
+    el.addEventListener('click', e=>addRipple(el,e));
+  });
 }
 
+/* ══ STATS ══ */
 function updateStats(){
-    const v=Object.values(cart), t=v.length, d=v.filter(i=>i.checked).length, p=t?Math.round(d/t*100):0;
-    document.getElementById('statTotal').textContent=t;
-    document.getElementById('statDone').textContent=d;
-    document.getElementById('statPct').textContent=p+'%';
-    document.getElementById('progressFill').style.width=p+'%';
+  const v=Object.values(cart), t=v.length, d=v.filter(i=>i.checked).length, p=t?Math.round(d/t*100):0;
+  document.getElementById('statTotal').textContent=t;
+  document.getElementById('statDone').textContent=d;
+  document.getElementById('statPct').textContent=p+'%';
+  document.getElementById('progressFill').style.width=p+'%';
 }
 
-function updateBadge(){
-    const n=Object.keys(cart).length, b=document.getElementById('cartBadge');
-    b.style.display=n?'flex':'none'; b.textContent=n>99?'99+':n;
-}
-
-/* ── CHIPS ──────────────────────────────────────── */
-(function buildChips(){
-    const cats=[...new Set(CATALOG.map(p=>p.category))];
-    const wrap=document.getElementById('chipsWrap');
-    wrap.innerHTML=`<button class="chip active" data-cat="">Alle</button>`+
-        cats.map(c=>`<button class="chip" data-cat="${c}">${ci(c)} ${c}</button>`).join('');
-    wrap.querySelectorAll('.chip').forEach(ch=>{
-        ch.addEventListener('click',()=>{
-            activeCat=ch.dataset.cat;
-            wrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-            ch.classList.add('active'); render();
-        });
+/* ══ CHIPS ══ */
+(function(){
+  const cats=[...new Set(CATALOG.map(p=>p.category))];
+  const wrap=document.getElementById('chipsWrap');
+  wrap.innerHTML=`<button class="chip active" data-cat="">Alle</button>`+
+    cats.map(c=>`<button class="chip" data-cat="${c}">${ci(c)} ${c}</button>`).join('');
+  wrap.querySelectorAll('.chip').forEach(ch=>{
+    ch.addEventListener('click',()=>{
+      activeCat=ch.dataset.cat;
+      wrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      ch.classList.add('active'); render();
     });
+  });
 })();
 
-/* ── TABS ───────────────────────────────────────── */
+/* ══ TABS ══ */
 document.querySelectorAll('.tab').forEach(tab=>{
-    tab.addEventListener('click',()=>{
-        activeView=tab.dataset.view;
-        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-        tab.classList.add('active');
-        document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-        document.getElementById(`${activeView}-view`).classList.add('active');
-        document.getElementById('chipsWrap').style.display=activeView==='products'?'flex':'none';
-        if(activeView==='shopping') syncCart();
-    });
+  tab.addEventListener('click',()=>{
+    activeView=tab.dataset.view;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById(`${activeView}-view`).classList.add('active');
+    document.getElementById('chipsWrap').style.display=activeView==='products'?'flex':'none';
+    if(activeView==='shopping') syncCart();
+  });
 });
 
 document.getElementById('searchInput').addEventListener('input',e=>{search=e.target.value.toLowerCase().trim();render();});
 document.getElementById('cartIconBtn').addEventListener('click',()=>document.querySelector('[data-view="shopping"]').click());
 
-/* ── CLEAR ──────────────────────────────────────── */
+/* ══ CLEAR ══ */
 document.getElementById('clearBtn').addEventListener('click',()=>document.getElementById('clearModal').classList.add('open'));
 document.getElementById('cancelClear').addEventListener('click',()=>document.getElementById('clearModal').classList.remove('open'));
 document.getElementById('confirmClear').addEventListener('click',()=>{
-    cart={}; remove(cartRef); render(); updateStats(); updateBadge(); syncCart();
-    document.getElementById('clearModal').classList.remove('open');
-    showToast('🗑️ Liste geleert');
+  cart={}; remove(cartRef); render(); updateStats(); updateBadge(); syncCart();
+  document.getElementById('clearModal').classList.remove('open');
+  showToast('🗑️ Liste geleert');
 });
 document.getElementById('clearModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
-/* ── PRINT / PDF ────────────────────────────────── */
+/* ══ PRINT ══ */
 document.getElementById('printBtn').addEventListener('click',()=>{
-    const items=CATALOG.filter(p=>cart[p.name]?.qty>0).map(p=>({...p,...cart[p.name]}));
-    if(!items.length){showToast('⚠️ Liste ist leer!');return;}
-
-    const total=items.length, done=items.filter(i=>i.checked).length, pct=total?Math.round(done/total*100):0;
-    const now=new Date();
-    const dateStr=now.toLocaleDateString('de-AT',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-
-    const catOrder=[...new Set(CATALOG.map(p=>p.category))];
-    const g={};
-    items.forEach(p=>(g[p.category]=g[p.category]||[]).push(p));
-
-    let tables='';
-    catOrder.forEach(cat=>{
-        if(!g[cat]) return;
-        tables+=`<div class="print-cat-title">${ci(cat)} ${cat}</div>
-        <table><thead><tr><th></th><th>Produkt</th><th class="c-chk">✓</th><th class="c-qty">Menge</th></tr></thead><tbody>`+
-        g[cat].map(p=>`<tr>
-            <td class="c-icon">${p.icon}</td>
-            <td>${p.name}</td>
-            <td class="c-chk"><span class="chk-circle ${p.checked?'chk-done':''}"></span></td>
-            <td class="c-qty">${p.qty}×</td>
-        </tr>`).join('')+
-        `</tbody></table>`;
-    });
-
-    document.getElementById('printPage').innerHTML=`
-        <div class="print-header">
-            <div class="print-logo">Einkaufsliste</div>
-            <div class="print-meta">${dateStr}<br>Einkauf-App</div>
-        </div>
-        <div class="print-summary">
-            <div class="print-summary-box"><strong>${total}</strong><span>Artikel</span></div>
-            <div class="print-summary-box"><strong>${done}</strong><span>Erledigt</span></div>
-            <div class="print-summary-box"><strong>${pct}%</strong><span>Fortschritt</span></div>
-        </div>
-        ${tables}
-        <div class="print-footer">
-            <span>Einkauf-App</span>
-            <span>Gedruckt: ${now.toLocaleString('de-AT')}</span>
-        </div>`;
-    setTimeout(()=>window.print(), 80);
+  const items=CATALOG.filter(p=>cart[p.name]?.qty>0).map(p=>({...p,...cart[p.name]}));
+  if(!items.length){showToast('⚠️ Liste ist leer!');return;}
+  const total=items.length, done=items.filter(i=>i.checked).length, pct=total?Math.round(done/total*100):0;
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('de-AT',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const catOrder=[...new Set(CATALOG.map(p=>p.category))];
+  const g={};
+  items.forEach(p=>(g[p.category]=g[p.category]||[]).push(p));
+  let tables='';
+  catOrder.forEach(cat=>{
+    if(!g[cat]) return;
+    tables+=`<div class="print-cat-title">${ci(cat)} ${cat}</div>
+    <table><thead><tr><th></th><th>Produkt</th><th class="c-chk">✓</th><th class="c-qty">Menge</th></tr></thead><tbody>`+
+    g[cat].map(p=>`<tr><td class="c-icon">${p.icon}</td><td>${p.name}</td>
+      <td class="c-chk"><span class="chk-circle ${p.checked?'chk-done':''}"></span></td>
+      <td class="c-qty">${p.qty}×</td></tr>`).join('')+
+    `</tbody></table>`;
+  });
+  document.getElementById('printPage').innerHTML=`
+    <div class="print-header">
+      <div class="print-logo">Einkaufsliste</div>
+      <div class="print-meta">${dateStr}<br>Einkauf-App</div>
+    </div>
+    <div class="print-summary">
+      <div class="print-summary-box"><strong>${total}</strong><span>Artikel</span></div>
+      <div class="print-summary-box"><strong>${done}</strong><span>Erledigt</span></div>
+      <div class="print-summary-box"><strong>${pct}%</strong><span>Fortschritt</span></div>
+    </div>${tables}
+    <div class="print-footer"><span>Einkauf-App</span><span>Gedruckt: ${now.toLocaleString('de-AT')}</span></div>`;
+  setTimeout(()=>window.print(),80);
 });
 
-/* ── TOAST ──────────────────────────────────────── */
+/* ══ TOAST ══ */
 function showToast(msg){
-    const t=document.getElementById('toast');
-    t.textContent=msg; t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),2500);
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
 }
 
 render();
