@@ -7,37 +7,6 @@
 <title>🛒 Einkauf</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- ═══════════════ PRINT ═══════════════ -->
-<style>
-@media print{
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html,body{width:210mm;font-family:'Helvetica Neue',Arial,sans-serif;color:#000;background:#fff;}
-  .app{display:none!important;}
-  .print-page{display:block!important;padding:16mm 14mm 12mm;}
-  .print-header{border-bottom:2.5px solid #000;padding-bottom:9px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:flex-end;}
-  .print-logo{font-size:21pt;font-weight:800;letter-spacing:-.5px;}
-  .print-meta{font-size:8pt;color:#555;text-align:right;line-height:1.7;}
-  .print-summary{display:flex;gap:16px;margin-bottom:16px;}
-  .print-summary-box{border:1px solid #ddd;border-radius:5px;padding:6px 14px;text-align:center;}
-  .print-summary-box strong{display:block;font-size:15pt;font-weight:800;line-height:1.2;}
-  .print-summary-box span{font-size:7.5pt;color:#777;text-transform:uppercase;letter-spacing:.5px;}
-  .print-cat-title{font-size:7pt;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#555;border-top:1px solid #e0e0e0;padding:7px 0 4px;margin-top:13px;}
-  .print-cat-title:first-of-type{margin-top:0;border-top:none;}
-  table{width:100%;border-collapse:collapse;margin-top:3px;}
-  th{font-size:6.5pt;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:#999;border-bottom:1px solid #e8e8e8;padding:4px 6px;text-align:left;}
-  th.c-chk,th.c-qty{text-align:center;width:44px;}
-  td{font-size:9.5pt;padding:5.5px 6px;border-bottom:1px solid #f3f3f3;vertical-align:middle;}
-  td.c-icon{width:24px;padding-right:2px;font-size:13pt;}
-  td.c-chk,td.c-qty{text-align:center;font-weight:700;}
-  tr:last-child td{border-bottom:none;}
-  .chk-circle{display:inline-block;width:13px;height:13px;border:1.5px solid #bbb;border-radius:3px;vertical-align:middle;}
-  .chk-done{background:#111;border-color:#111;}
-  .print-footer{margin-top:20px;border-top:1px solid #e8e8e8;padding-top:7px;font-size:7pt;color:#aaa;display:flex;justify-content:space-between;}
-}
-@media screen{.print-page{display:none;}}
-</style>
-
-<!-- ═══════════════ APP ═══════════════ -->
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 :root{
@@ -127,17 +96,17 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
 @keyframes rippleAnim{to{transform:scale(4);opacity:0;}}
 
 /* CATEGORY COLORS */
-.co{background:rgba(251,146,60,.13)}  /* obst */
-.cv{background:rgba(251,191,36,.13)}  /* vorrat */
-.cb{background:rgba(180,83,9,.12)}    /* backwaren */
-.ck{background:rgba(59,130,246,.12)}  /* kühlung */
-.ct{background:rgba(99,102,241,.12)}  /* tiefkühl */
-.ch{background:rgba(107,114,128,.12)} /* haushalt */
-.cg{background:rgba(14,165,233,.12)}  /* getränke */
-.cs{background:rgba(236,72,153,.12)}  /* süßig */
-.ck2{background:rgba(234,179,8,.13)} /* kasse */
+.co{background:rgba(251,146,60,.13)}
+.cv{background:rgba(251,191,36,.13)}
+.cb{background:rgba(180,83,9,.12)}
+.ck{background:rgba(59,130,246,.12)}
+.ct{background:rgba(99,102,241,.12)}
+.ch{background:rgba(107,114,128,.12)}
+.cg{background:rgba(14,165,233,.12)}
+.cs{background:rgba(236,72,153,.12)}
+.ck2{background:rgba(234,179,8,.13)}
 
-/* LIST CARDS (Shopping tab) */
+/* LIST CARDS */
 .list-sec{padding:0 14px;}
 .product-card{display:flex;align-items:center;padding:11px 12px;background:#fff;border-radius:var(--rsm);margin-bottom:5px;border:1.5px solid transparent;position:relative;overflow:hidden;}
 .product-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:background .12s;}
@@ -150,7 +119,6 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
 .p-name{font-size:14px;font-weight:600;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .product-card.checked .p-name{text-decoration:line-through;color:var(--tx3);}
 .p-sub{font-size:11px;color:var(--tx3);margin-top:1px;}
-/* CHECKBOX – tap target enlarged */
 .check-box{width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
 .check-inner{width:26px;height:26px;border-radius:8px;border:2px solid var(--bd);background:#fff;display:flex;align-items:center;justify-content:center;transition:var(--sp);font-size:13px;pointer-events:none;}
 .check-inner.done{background:var(--a);border-color:var(--a);color:#fff;animation:cPop .32s cubic-bezier(.34,1.56,.64,1);}
@@ -165,34 +133,20 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
 .prog-track{height:6px;background:var(--bg3);border-radius:100px;overflow:hidden;}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:100px;transition:width .45s cubic-bezier(.4,0,.2,1);}
 
-/* ═══ REALISTIC SHOPPING CART ═══ */
+/* CART VISUAL */
 .cart-section{margin:0 14px 8px;background:linear-gradient(135deg,#f8fafc,#f1f5f9);border-radius:var(--rsm);padding:14px 14px 16px;border:1.5px solid var(--bd);}
 .cart-label{font-size:9.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--tx3);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
 .cart-stage{display:flex;justify-content:center;align-items:flex-end;height:168px;position:relative;}
-/* SVG wrapper */
 .cart-wrap{position:relative;width:220px;height:160px;}
 .cart-wrap svg{width:220px;height:160px;overflow:visible;}
-/* Emoji items inside basket */
-.cart-items{
-  position:absolute;
-  /* aligned to basket interior */
-  left:46px;top:22px;
-  width:130px;height:72px;
-  display:flex;flex-wrap:wrap;
-  align-items:center;justify-content:center;
-  gap:2px;padding:6px;
-  overflow:hidden;
-  pointer-events:none;
-}
+.cart-items{position:absolute;left:46px;top:22px;width:130px;height:72px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px;padding:6px;overflow:hidden;pointer-events:none;}
 .c-item{font-size:17px;line-height:1;animation:popIn .28s cubic-bezier(.34,1.56,.64,1);}
 @keyframes popIn{from{transform:scale(0) rotate(-20deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
 .c-empty{font-size:11px;color:var(--tx3);text-align:center;width:100%;line-height:1.5;}
-/* wheel spin */
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .wl-group,.wr-group{transform-origin:center;transform-box:fill-box;}
 .do-spin .wl-group{animation:spin .55s ease-out;}
 .do-spin .wr-group{animation:spin .55s ease-out .04s;}
-/* fly emoji */
 .fly-e{position:fixed;pointer-events:none;z-index:9999;font-size:24px;}
 
 /* ACTION BUTTONS */
@@ -201,6 +155,9 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
 .action-btn:active{transform:scale(.96);}
 .a-print{background:#111;color:#fff;}
 .a-clear{background:#fee2e2;color:var(--danger);}
+
+/* PDF LOADING */
+.pdf-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;}
 
 /* EMPTY */
 .empty{text-align:center;padding:55px 20px;}
@@ -232,7 +189,6 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
 </style>
 </head>
 <body>
-<div class="print-page" id="printPage"></div>
 <canvas id="confettiCanvas"></canvas>
 
 <div class="app">
@@ -277,7 +233,7 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
       </div>
 
       <div class="shop-actions">
-        <button class="action-btn a-print" id="printBtn">🖨️ Drucken / PDF</button>
+        <button class="action-btn a-print" id="printBtn">📄 PDF erstellen</button>
         <button class="action-btn a-clear" id="clearBtn">🗑️ Alles löschen</button>
       </div>
 
@@ -315,63 +271,31 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
                   <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="rgba(255,255,255,.5)"/>
                 </filter>
               </defs>
-
-              <!-- ground shadow -->
               <ellipse cx="110" cy="155" rx="70" ry="8" fill="rgba(0,0,0,.1)"/>
-
-              <!-- ── BASKET BODY ── -->
-              <!-- back face -->
-              <polygon points="45,20 175,20 168,97 52,97"
-                fill="url(#gBody)" stroke="#94a3b8" stroke-width="2"
-                stroke-linejoin="round" filter="url(#dropshadow)"/>
-              <!-- left side -->
-              <polygon points="45,20 52,97 40,104 33,27"
-                fill="url(#gSide)" stroke="#7c8fa3" stroke-width="1.5"/>
-              <!-- right side -->
-              <polygon points="175,20 168,97 180,104 187,27"
-                fill="url(#gSide)" stroke="#7c8fa3" stroke-width="1.5"/>
-              <!-- floor -->
-              <polygon points="52,97 168,97 180,104 40,104"
-                fill="#8899aa" stroke="#64748b" stroke-width="1.5"/>
-
-              <!-- ── WIRE GRID HORIZONTAL ── -->
+              <polygon points="45,20 175,20 168,97 52,97" fill="url(#gBody)" stroke="#94a3b8" stroke-width="2" stroke-linejoin="round" filter="url(#dropshadow)"/>
+              <polygon points="45,20 52,97 40,104 33,27" fill="url(#gSide)" stroke="#7c8fa3" stroke-width="1.5"/>
+              <polygon points="175,20 168,97 180,104 187,27" fill="url(#gSide)" stroke="#7c8fa3" stroke-width="1.5"/>
+              <polygon points="52,97 168,97 180,104 40,104" fill="#8899aa" stroke="#64748b" stroke-width="1.5"/>
               <line x1="46" y1="42" x2="174" y2="42" stroke="#a8b8c8" stroke-width="1.2" opacity=".8"/>
               <line x1="47" y1="58" x2="173" y2="58" stroke="#a8b8c8" stroke-width="1.2" opacity=".8"/>
               <line x1="48" y1="74" x2="172" y2="74" stroke="#a8b8c8" stroke-width="1.2" opacity=".8"/>
-              <!-- ── WIRE GRID VERTICAL ── -->
               <line x1="74"  y1="21" x2="71"  y2="96" stroke="#a8b8c8" stroke-width="1.2" opacity=".7"/>
               <line x1="110" y1="20" x2="110" y2="97" stroke="#a8b8c8" stroke-width="1.2" opacity=".7"/>
               <line x1="146" y1="21" x2="149" y2="96" stroke="#a8b8c8" stroke-width="1.2" opacity=".7"/>
-
-              <!-- ── TOP RIM ── -->
               <rect x="43" y="15" width="134" height="8" rx="4" fill="url(#gRim)" stroke="#7c8fa3" stroke-width="1" filter="url(#rimglow)"/>
-
-              <!-- ── HANDLE ── -->
               <path d="M82,15 C82,-8 138,-8 138,15" fill="none" stroke="url(#gHandle)" stroke-width="7" stroke-linecap="round"/>
-              <!-- handle highlight -->
               <path d="M84,15 C84,-5 136,-5 136,15" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" opacity=".6"/>
-
-              <!-- ── AXLE ── -->
               <rect x="36" y="103" width="148" height="6" rx="3" fill="#475569"/>
-
-              <!-- ── LEFT WHEEL GROUP ── -->
               <g class="wl-group" id="wlGroup" style="transform-origin:58px 132px">
-                <!-- tyre -->
                 <circle cx="58" cy="132" r="18" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
-                <!-- rim -->
                 <circle cx="58" cy="132" r="13" fill="url(#gWheelOuter)"/>
-                <!-- hub -->
                 <circle cx="58" cy="132" r="4.5" fill="#94a3b8"/>
-                <!-- spokes -->
                 <line x1="58" y1="119" x2="58" y2="145" stroke="#64748b" stroke-width="2"/>
                 <line x1="45" y1="132" x2="71" y2="132" stroke="#64748b" stroke-width="2"/>
                 <line x1="49" y1="123" x2="67" y2="141" stroke="#64748b" stroke-width="2"/>
                 <line x1="49" y1="141" x2="67" y2="123" stroke="#64748b" stroke-width="2"/>
-                <!-- tyre highlight -->
                 <path d="M46,122 A18,18 0 0,1 70,122" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="3" stroke-linecap="round"/>
               </g>
-
-              <!-- ── RIGHT WHEEL GROUP ── -->
               <g class="wr-group" id="wrGroup" style="transform-origin:162px 132px">
                 <circle cx="162" cy="132" r="18" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
                 <circle cx="162" cy="132" r="13" fill="url(#gWheelOuter)"/>
@@ -383,8 +307,6 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
                 <path d="M150,122 A18,18 0 0,1 174,122" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="3" stroke-linecap="round"/>
               </g>
             </svg>
-
-            <!-- Emoji items floating inside the basket -->
             <div class="cart-items" id="cartItems">
               <span class="c-empty">Hake Artikel ab ✔</span>
             </div>
@@ -410,7 +332,9 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
 </div>
 <div class="toast" id="toast"></div>
 
-<!-- ═══════════════ JS ═══════════════ -->
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script type="module">
 import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -427,211 +351,222 @@ initializeApp({
 const db  = getDatabase();
 const DBref = ref(db,'shoppingCart');
 
-/* ═══════════════ CATALOG ═══════════════ */
+/* ═══ CATALOG — Reihenfolge exakt lt. Einkaufsliste_sortiert.csv ═══ */
 const CATALOG=[
-  // Obst & Gemüse
-  {name:"Erdbeeren",            category:"Obst & Gemüse", icon:"🍓"},
-  {name:"Heidelbeeren",         category:"Obst & Gemüse", icon:"🫐"},
-  {name:"Himbeeren",            category:"Obst & Gemüse", icon:"🍒"},
-  {name:"Brokkoli",             category:"Obst & Gemüse", icon:"🥦"},
-  {name:"Champignons",          category:"Obst & Gemüse", icon:"🍄"},
-  {name:"Karfiol",              category:"Obst & Gemüse", icon:"🥦"},
-  {name:"Lauch",                category:"Obst & Gemüse", icon:"🌱"},
-  {name:"Blattsalat",           category:"Obst & Gemüse", icon:"🥬"},
-  {name:"Eisbergsalat",         category:"Obst & Gemüse", icon:"🥬"},
-  {name:"Vogerlsalat",          category:"Obst & Gemüse", icon:"🥬"},
-  {name:"Babyblattspinat",      category:"Obst & Gemüse", icon:"🍃"},
-  {name:"Orangen",              category:"Obst & Gemüse", icon:"🍊"},
-  {name:"Mandarinen",           category:"Obst & Gemüse", icon:"🍊"},
-  {name:"Zitronen",             category:"Obst & Gemüse", icon:"🍋"},
-  {name:"Trauben",              category:"Obst & Gemüse", icon:"🍇"},
-  {name:"Avokado",              category:"Obst & Gemüse", icon:"🥑"},
-  {name:"Kiwi",                 category:"Obst & Gemüse", icon:"🥝"},
-  {name:"Mango",                category:"Obst & Gemüse", icon:"🥭"},
-  {name:"Birnen",               category:"Obst & Gemüse", icon:"🍐"},
-  {name:"Bananen",              category:"Obst & Gemüse", icon:"🍌"},
-  {name:"Zwiebeln",             category:"Obst & Gemüse", icon:"🧅"},
-  {name:"Kartoffeln",           category:"Obst & Gemüse", icon:"🥔"},
-  {name:"Süßkartoffel",         category:"Obst & Gemüse", icon:"🍠"},
-  {name:"Knoblauch",            category:"Obst & Gemüse", icon:"🧄"},
-  {name:"Ingwer",               category:"Obst & Gemüse", icon:"🫚"},
-  {name:"Karotten",             category:"Obst & Gemüse", icon:"🥕"},
-  {name:"Rote Rüben Frisch",    category:"Obst & Gemüse", icon:"🟣"},
-  {name:"Rote Rüben Vorgekocht",category:"Obst & Gemüse", icon:"🟤"},
-  {name:"Paprika",              category:"Obst & Gemüse", icon:"🫑"},
-  {name:"Melanzani",            category:"Obst & Gemüse", icon:"🍆"},
-  {name:"Zuchini",              category:"Obst & Gemüse", icon:"🥒"},
-  {name:"Gurken",               category:"Obst & Gemüse", icon:"🥒"},
-  {name:"Tomaten",              category:"Obst & Gemüse", icon:"🍅"},
-  {name:"Cocktailtomaten",      category:"Obst & Gemüse", icon:"🍅"},
-  // Vorratsschrank
-  {name:"Walnusskerne",         category:"Vorratsschrank", icon:"🌰"},
-  {name:"Cashewkerne",          category:"Vorratsschrank", icon:"🥜"},
-  {name:"Haferflocken grob",    category:"Vorratsschrank", icon:"🥣"},
-  {name:"Haferflocken fein",    category:"Vorratsschrank", icon:"🥣"},
-  {name:"Müsli",                category:"Vorratsschrank", icon:"🥣"},
-  {name:"Toastbrot",            category:"Vorratsschrank", icon:"🍞"},
-  {name:"Kirschmarmelade",      category:"Vorratsschrank", icon:"🍒"},
-  {name:"Marillenmarmelade",    category:"Vorratsschrank", icon:"🍑"},
-  {name:"Powidelmarmelade",     category:"Vorratsschrank", icon:"🍯"},
-  {name:"Erdbeermarmelade",     category:"Vorratsschrank", icon:"🍓"},
-  {name:"Himbeermarmelade",     category:"Vorratsschrank", icon:"🍒"},
-  {name:"Heidelbeermarmelade",  category:"Vorratsschrank", icon:"🫐"},
-  {name:"Honig",                category:"Vorratsschrank", icon:"🍯"},
-  {name:"Honig Quetschi",       category:"Vorratsschrank", icon:"🍯"},
-  {name:"Kräutertee",           category:"Vorratsschrank", icon:"🍵"},
-  {name:"Früchtetee",           category:"Vorratsschrank", icon:"🍵"},
-  {name:"Kaffee",               category:"Vorratsschrank", icon:"☕"},
-  {name:"Dosenbohnen",          category:"Vorratsschrank", icon:"🥫"},
-  {name:"Dosenlinsen",          category:"Vorratsschrank", icon:"🥫"},
-  {name:"Dosenkichererbsen",    category:"Vorratsschrank", icon:"🥫"},
-  {name:"Mais im Glas",         category:"Vorratsschrank", icon:"🌽"},
-  {name:"Weizenvollkornmehl",   category:"Vorratsschrank", icon:"🌾"},
-  {name:"Roggenmehl",           category:"Vorratsschrank", icon:"🌾"},
-  {name:"Dinkelmehl",           category:"Vorratsschrank", icon:"🌾"},
-  {name:"Weizenmehl",           category:"Vorratsschrank", icon:"🌾"},
-  {name:"Dinkelvollkornmehl",   category:"Vorratsschrank", icon:"🌾"},
-  {name:"Weizengrieß",          category:"Vorratsschrank", icon:"🌾"},
-  {name:"Maisgrieß",            category:"Vorratsschrank", icon:"🌽"},
-  {name:"Zucker",               category:"Vorratsschrank", icon:"🧂"},
-  {name:"Rohrzucker",           category:"Vorratsschrank", icon:"🎋"},
-  {name:"Olivenöl",             category:"Vorratsschrank", icon:"🫙"},
-  {name:"Sonneblumenöl",        category:"Vorratsschrank", icon:"🫙"},
-  {name:"Rapsöl",               category:"Vorratsschrank", icon:"🫙"},
-  {name:"Apfelessig",           category:"Vorratsschrank", icon:"🍶"},
-  {name:"Balsamicoessig",       category:"Vorratsschrank", icon:"🍶"},
-  {name:"Kochschokolade",       category:"Vorratsschrank", icon:"🍫"},
-  {name:"Vanillepudding",       category:"Vorratsschrank", icon:"🍮"},
-  {name:"Schokopudding",        category:"Vorratsschrank", icon:"🍮"},
-  {name:"Rosinen",              category:"Vorratsschrank", icon:"🍇"},
-  {name:"Trockenhefe",          category:"Vorratsschrank", icon:"🫧"},
-  {name:"Vanillezucker",        category:"Vorratsschrank", icon:"🧁"},
-  {name:"Staubzucker",          category:"Vorratsschrank", icon:"🤍"},
-  {name:"Knödelbrot",           category:"Vorratsschrank", icon:"🍞"},
-  {name:"Eier",                 category:"Vorratsschrank", icon:"🥚"},
-  {name:"Salz",                 category:"Vorratsschrank", icon:"🧂"},
-  {name:"Pfeffer",              category:"Vorratsschrank", icon:"🌶️"},
-  {name:"Currypulver",          category:"Vorratsschrank", icon:"🍛"},
-  {name:"Paprikapulver",        category:"Vorratsschrank", icon:"🌶️"},
-  {name:"Muskat",               category:"Vorratsschrank", icon:"🌰"},
-  {name:"Zimt",                 category:"Vorratsschrank", icon:"🪵"},
-  {name:"Gewürze",              category:"Vorratsschrank", icon:"🌿"},
-  {name:"Tomatenstücke (Dose)", category:"Vorratsschrank", icon:"🥫"},
-  {name:"Thunfisch",            category:"Vorratsschrank", icon:"🐟"},
-  {name:"Oliven",               category:"Vorratsschrank", icon:"🫒"},
-  {name:"Tomatensauce",         category:"Vorratsschrank", icon:"🥫"},
-  {name:"Spaghetti",            category:"Vorratsschrank", icon:"🍝"},
-  {name:"Vollkornspaghetti",    category:"Vorratsschrank", icon:"🍝"},
-  {name:"Fussili / Spiralnudeln",category:"Vorratsschrank",icon:"🍝"},
-  {name:"Basmatireis / Reis",   category:"Vorratsschrank", icon:"🍚"},
-  // Backwaren
-  {name:"Brot",  category:"Backwaren", icon:"🥖"},
-  {name:"Semmeln",category:"Backwaren",icon:"🥐"},
-  {name:"Zopf",  category:"Backwaren", icon:"🥖"},
-  {name:"Wraps", category:"Backwaren", icon:"🌯"},
-  // Kühlung
-  {name:"Faschiertes",          category:"Kühlung", icon:"🥩"},
-  {name:"Hühnerfleisch",        category:"Kühlung", icon:"🍗"},
-  {name:"Hefe",                 category:"Kühlung", icon:"🫧"},
-  {name:"Gnocchi frisch",       category:"Kühlung", icon:"🫘"},
-  {name:"Hirtenkäse",           category:"Kühlung", icon:"🧀"},
-  {name:"Parmesan",             category:"Kühlung", icon:"🧀"},
-  {name:"Pizzakäse",            category:"Kühlung", icon:"🧀"},
-  {name:"Mozarella",            category:"Kühlung", icon:"🧀"},
-  {name:"Steirischer Bergkäse", category:"Kühlung", icon:"🧀"},
-  {name:"Käsescheiben",         category:"Kühlung", icon:"🧀"},
-  {name:"Topfen",               category:"Kühlung", icon:"🥛"},
-  {name:"Frischkäse",           category:"Kühlung", icon:"🥛"},
-  {name:"Fruchtjoghurt",        category:"Kühlung", icon:"🍓"},
-  {name:"Joghurt",              category:"Kühlung", icon:"🥛"},
-  {name:"Sahne",                category:"Kühlung", icon:"🥛"},
-  {name:"Creme Fraiche",        category:"Kühlung", icon:"🥛"},
-  {name:"Sauerrahm",            category:"Kühlung", icon:"🥛"},
-  {name:"Butter",               category:"Kühlung", icon:"🧈"},
-  {name:"Milch",                category:"Kühlung", icon:"🥛"},
-  // Tiefkühl
-  {name:"Vanilleeis",           category:"Tiefkühl", icon:"🍦"},
-  {name:"Tiefkühlhimbeeren",    category:"Tiefkühl", icon:"🍒"},
-  {name:"Tiefkühlbeeren",       category:"Tiefkühl", icon:"🫐"},
-  {name:"Tiefkühlblattspinat",  category:"Tiefkühl", icon:"🥬"},
-  {name:"Tiefkühlcremespinat",  category:"Tiefkühl", icon:"🥬"},
-  {name:"Tiefkühlgemüse",       category:"Tiefkühl", icon:"🥦"},
-  {name:"Tiefkühlpizza",        category:"Tiefkühl", icon:"🍕"},
-  {name:"Pommes",               category:"Tiefkühl", icon:"🍟"},
-  {name:"Süßkartoffelpommes",   category:"Tiefkühl", icon:"🍠"},
-  {name:"Tiefkühlerbsen",       category:"Tiefkühl", icon:"🫛"},
-  {name:"Tiefkühlkarfiol",      category:"Tiefkühl", icon:"🥦"},
-  {name:"Tiefkühlbrokkoli",     category:"Tiefkühl", icon:"🥦"},
-  // Haushalt
-  {name:"Shampoo",              category:"Haushalt", icon:"🧴"},
-  {name:"Bodylotion",           category:"Haushalt", icon:"🧴"},
-  {name:"Deo",                  category:"Haushalt", icon:"🫧"},
-  {name:"Taschentücher",        category:"Haushalt", icon:"🤧"},
-  {name:"Zahnpasta",            category:"Haushalt", icon:"🪥"},
-  {name:"Zahnbürste",           category:"Haushalt", icon:"🪥"},
-  {name:"Geschirrspülertabs",   category:"Haushalt", icon:"🧼"},
-  {name:"Spülmittel",           category:"Haushalt", icon:"🧼"},
-  {name:"Waschmittel",          category:"Haushalt", icon:"🧺"},
-  {name:"Klopapier",            category:"Haushalt", icon:"🧻"},
-  {name:"Küchenrolle",          category:"Haushalt", icon:"🧻"},
-  {name:"Müllbeutel",           category:"Haushalt", icon:"🗑️"},
-  // Getränke
-  {name:"Wein",       category:"Getränke", icon:"🍷"},
-  {name:"Mineralwasser",category:"Getränke",icon:"💧"},
-  {name:"Sirup",      category:"Getränke", icon:"🧃"},
-  {name:"Cola",       category:"Getränke", icon:"🥤"},
-  {name:"Apfelsaft",  category:"Getränke", icon:"🍎"},
-  {name:"Bier",       category:"Getränke", icon:"🍺"},
-  // Süßigkeiten
-  {name:"Vollmilchschokolade",  category:"Süßigkeiten", icon:"🍫"},
-  {name:"Zartbitterschokolade", category:"Süßigkeiten", icon:"🍫"},
-  {name:"Chips",      category:"Süßigkeiten", icon:"🥨"},
-  {name:"Kekse",      category:"Süßigkeiten", icon:"🍪"},
-  {name:"Gummibärchen",category:"Süßigkeiten",icon:"🐻"},
-  {name:"Müsliriegel",category:"Süßigkeiten", icon:"🍫"},
-  // Kasse
-  {name:"Batterien",  category:"Kasse", icon:"🔋"},
+  // ── Obst & Gemüse (Eingang) ──────────────────────────────────────
+  {name:"Erdbeeren",             category:"Obst & Gemüse",  icon:"🍓"},
+  {name:"Heidelbeeren",          category:"Obst & Gemüse",  icon:"🫐"},
+  {name:"Himbeeren",             category:"Obst & Gemüse",  icon:"🍒"},
+  {name:"Brokkoli",              category:"Obst & Gemüse",  icon:"🥦"},
+  {name:"Champignons",           category:"Obst & Gemüse",  icon:"🍄"},
+  {name:"Karfiol",               category:"Obst & Gemüse",  icon:"🥦"},
+  {name:"Lauch",                 category:"Obst & Gemüse",  icon:"🌱"},
+  {name:"Blattsalat",            category:"Obst & Gemüse",  icon:"🥬"},
+  {name:"Eisbergsalat",          category:"Obst & Gemüse",  icon:"🥬"},
+  {name:"Vogerlsalat",           category:"Obst & Gemüse",  icon:"🥬"},
+  {name:"Babyblattspinat",       category:"Obst & Gemüse",  icon:"🍃"},
+  {name:"Orangen",               category:"Obst & Gemüse",  icon:"🍊"},
+  {name:"Mandarinen",            category:"Obst & Gemüse",  icon:"🍊"},
+  {name:"Zitronen",              category:"Obst & Gemüse",  icon:"🍋"},
+  {name:"Trauben",               category:"Obst & Gemüse",  icon:"🍇"},
+  {name:"Avokado",               category:"Obst & Gemüse",  icon:"🥑"},
+  {name:"Kiwi",                  category:"Obst & Gemüse",  icon:"🥝"},
+  {name:"Mango",                 category:"Obst & Gemüse",  icon:"🥭"},
+  {name:"Birnen",                category:"Obst & Gemüse",  icon:"🍐"},
+  {name:"Äpfel",                 category:"Obst & Gemüse",  icon:"🍎"},
+  {name:"Bananen",               category:"Obst & Gemüse",  icon:"🍌"},
+  {name:"Zwiebeln",              category:"Obst & Gemüse",  icon:"🧅"},
+  {name:"Kartoffeln",            category:"Obst & Gemüse",  icon:"🥔"},
+  {name:"Süßkartoffel",          category:"Obst & Gemüse",  icon:"🍠"},
+  {name:"Ingwer",                category:"Obst & Gemüse",  icon:"🫚"},
+  {name:"Knoblauch",             category:"Obst & Gemüse",  icon:"🧄"},
+  {name:"Rote Rüben Frisch",     category:"Obst & Gemüse",  icon:"🟣"},
+  {name:"Rote Rüben Vorgekocht", category:"Obst & Gemüse",  icon:"🟤"},
+  {name:"Karotten",              category:"Obst & Gemüse",  icon:"🥕"},
+  {name:"Gurken",                category:"Obst & Gemüse",  icon:"🥒"},
+  {name:"Paprika",               category:"Obst & Gemüse",  icon:"🫑"},
+  {name:"Melanzani",             category:"Obst & Gemüse",  icon:"🍆"},
+  {name:"Zuchini",               category:"Obst & Gemüse",  icon:"🥒"},
+  {name:"Kokosmilch",            category:"Vorratsschrank", icon:"🥥"},
+  {name:"Tomaten",               category:"Obst & Gemüse",  icon:"🍅"},
+  {name:"Cocktailtomaten",       category:"Obst & Gemüse",  icon:"🍅"},
+  // ── Trockensortiment ─────────────────────────────────────────────
+  {name:"Walnusskerne",          category:"Vorratsschrank", icon:"🌰"},
+  {name:"Cashewkerne",           category:"Vorratsschrank", icon:"🥜"},
+  {name:"Brot",                  category:"Backwaren",      icon:"🥖"},
+  {name:"Semmeln",               category:"Backwaren",      icon:"🥐"},
+  {name:"Zopf",                  category:"Backwaren",      icon:"🥖"},
+  {name:"Wraps",                 category:"Backwaren",      icon:"🌯"},
+  {name:"Haferflocken grob",     category:"Vorratsschrank", icon:"🥣"},
+  {name:"Haferflocken fein",     category:"Vorratsschrank", icon:"🥣"},
+  {name:"Müsli",                 category:"Vorratsschrank", icon:"🥣"},
+  {name:"Müsliriegel",           category:"Süßigkeiten",    icon:"🍫"},
+  {name:"Toastbrot",             category:"Vorratsschrank", icon:"🍞"},
+  {name:"Kirschmarmelade",       category:"Vorratsschrank", icon:"🍒"},
+  {name:"Marillenmarmelade",     category:"Vorratsschrank", icon:"🍑"},
+  {name:"Powidelmarmelade",      category:"Vorratsschrank", icon:"🍯"},
+  {name:"Erdbeermarmelade",      category:"Vorratsschrank", icon:"🍓"},
+  {name:"Himbeermarmelade",      category:"Vorratsschrank", icon:"🍒"},
+  {name:"Heidelbeermarmelade",   category:"Vorratsschrank", icon:"🫐"},
+  {name:"Honig",                 category:"Vorratsschrank", icon:"🍯"},
+  {name:"Honig Quetschi",        category:"Vorratsschrank", icon:"🍯"},
+  {name:"Kräutertee",            category:"Vorratsschrank", icon:"🍵"},
+  {name:"Früchtetee",            category:"Vorratsschrank", icon:"🍵"},
+  {name:"Kaffee",                category:"Vorratsschrank", icon:"☕"},
+  // ── Süßes & Getränke (Regal) ─────────────────────────────────────
+  {name:"Vollmilchschokolade",   category:"Süßigkeiten",    icon:"🍫"},
+  {name:"Zartbitterschokolade",  category:"Süßigkeiten",    icon:"🍫"},
+  {name:"Chips",                 category:"Süßigkeiten",    icon:"🥨"},
+  {name:"Kekse",                 category:"Süßigkeiten",    icon:"🍪"},
+  {name:"Gummibärchen",          category:"Süßigkeiten",    icon:"🐻"},
+  {name:"Wein",                  category:"Getränke",       icon:"🍷"},
+  {name:"Bier",                  category:"Getränke",       icon:"🍺"},
+  // ── Haushalt ─────────────────────────────────────────────────────
+  {name:"Shampoo",               category:"Haushalt",       icon:"🧴"},
+  {name:"Bodylotion",            category:"Haushalt",       icon:"🧴"},
+  {name:"Deo",                   category:"Haushalt",       icon:"🫧"},
+  {name:"Taschentücher",         category:"Haushalt",       icon:"🤧"},
+  {name:"Zahnpasta",             category:"Haushalt",       icon:"🪥"},
+  {name:"Zahnbürste",            category:"Haushalt",       icon:"🪥"},
+  {name:"Geschirrspülertabs",    category:"Haushalt",       icon:"🧼"},
+  {name:"Spülmittel",            category:"Haushalt",       icon:"🧼"},
+  {name:"Waschmittel",           category:"Haushalt",       icon:"🧺"},
+  {name:"Klopapier",             category:"Haushalt",       icon:"🧻"},
+  {name:"Küchenrolle",           category:"Haushalt",       icon:"🧻"},
+  {name:"Müllbeutel",            category:"Haushalt",       icon:"🗑️"},
+  // ── Tiefkühl (1. Gang) ───────────────────────────────────────────
+  {name:"Vanilleeis",            category:"Tiefkühl",       icon:"🍦"},
+  {name:"Tiefkühlhimbeeren",     category:"Tiefkühl",       icon:"🍒"},
+  {name:"Tiefkühlbeeren",        category:"Tiefkühl",       icon:"🫐"},
+  // ── Vorratsschrank (Konserven & Trockenwaren) ────────────────────
+  {name:"Dosenbohnen",           category:"Vorratsschrank", icon:"🥫"},
+  {name:"Dosenlinsen",           category:"Vorratsschrank", icon:"🥫"},
+  {name:"Dosenkichererbsen",     category:"Vorratsschrank", icon:"🥫"},
+  {name:"Mais im Glas",          category:"Vorratsschrank", icon:"🌽"},
+  {name:"Weizenvollkornmehl",    category:"Vorratsschrank", icon:"🌾"},
+  {name:"Roggenmehl",            category:"Vorratsschrank", icon:"🌾"},
+  {name:"Dinkelmehl",            category:"Vorratsschrank", icon:"🌾"},
+  {name:"Weizenmehl",            category:"Vorratsschrank", icon:"🌾"},
+  {name:"Dinkelvollkornmehl",    category:"Vorratsschrank", icon:"🌾"},
+  {name:"Weizengrieß",           category:"Vorratsschrank", icon:"🌾"},
+  {name:"Maisgrieß",             category:"Vorratsschrank", icon:"🌽"},
+  {name:"Zucker",                category:"Vorratsschrank", icon:"🧂"},
+  {name:"Rohrzucker",            category:"Vorratsschrank", icon:"🎋"},
+  {name:"Olivenöl",              category:"Vorratsschrank", icon:"🫙"},
+  {name:"Sonneblumenöl",         category:"Vorratsschrank", icon:"🫙"},
+  {name:"Rapsöl",                category:"Vorratsschrank", icon:"🫙"},
+  {name:"Apfelessig",            category:"Vorratsschrank", icon:"🍶"},
+  {name:"Balsamicoessig",        category:"Vorratsschrank", icon:"🍶"},
+  {name:"Kochschokolade",        category:"Vorratsschrank", icon:"🍫"},
+  {name:"Vanillepudding",        category:"Vorratsschrank", icon:"🍮"},
+  {name:"Schokopudding",         category:"Vorratsschrank", icon:"🍮"},
+  {name:"Rosinen",               category:"Vorratsschrank", icon:"🍇"},
+  {name:"Trockenhefe",           category:"Vorratsschrank", icon:"🫧"},
+  {name:"Vanillezucker",         category:"Vorratsschrank", icon:"🧁"},
+  {name:"Staubzucker",           category:"Vorratsschrank", icon:"🤍"},
+  {name:"Knödelbrot",            category:"Vorratsschrank", icon:"🍞"},
+  {name:"Eier",                  category:"Vorratsschrank", icon:"🥚"},
+  {name:"Salz",                  category:"Vorratsschrank", icon:"🧂"},
+  {name:"Pfeffer",               category:"Vorratsschrank", icon:"🌶️"},
+  {name:"Currypulver",           category:"Vorratsschrank", icon:"🍛"},
+  {name:"Paprikapulver",         category:"Vorratsschrank", icon:"🌶️"},
+  {name:"Muskat",                category:"Vorratsschrank", icon:"🌰"},
+  {name:"Zimt",                  category:"Vorratsschrank", icon:"🪵"},
+  {name:"Gewürze",               category:"Vorratsschrank", icon:"🌿"},
+  // ── Fleisch & Käse (Kühlung) ─────────────────────────────────────
+  {name:"Faschiertes",           category:"Kühlung",        icon:"🥩"},
+  {name:"Hühnerfleisch",         category:"Kühlung",        icon:"🍗"},
+  {name:"Hefe",                  category:"Kühlung",        icon:"🫧"},
+  {name:"Gnocchi frisch",        category:"Kühlung",        icon:"🫘"},
+  {name:"Hirtenkäse",            category:"Kühlung",        icon:"🧀"},
+  {name:"Parmesan",              category:"Kühlung",        icon:"🧀"},
+  {name:"Pizzakäse",             category:"Kühlung",        icon:"🧀"},
+  {name:"Mozarella",             category:"Kühlung",        icon:"🧀"},
+  {name:"Steirischer Bergkäse",  category:"Kühlung",        icon:"🧀"},
+  {name:"Käsescheiben",          category:"Kühlung",        icon:"🧀"},
+  {name:"Topfen",                category:"Kühlung",        icon:"🥛"},
+  {name:"Frischkäse",            category:"Kühlung",        icon:"🥛"},
+  {name:"Tomatenstücke (Dose)",  category:"Vorratsschrank", icon:"🥫"},
+  {name:"Thunfisch",             category:"Vorratsschrank", icon:"🐟"},
+  {name:"Oliven",                category:"Vorratsschrank", icon:"🫒"},
+  {name:"Tomatensauce",          category:"Vorratsschrank", icon:"🥫"},
+  {name:"Spaghetti",             category:"Vorratsschrank", icon:"🍝"},
+  {name:"Vollkornspaghetti",     category:"Vorratsschrank", icon:"🍝"},
+  {name:"Fussili / Spiralnudeln",category:"Vorratsschrank", icon:"🍝"},
+  {name:"Basmatireis / Reis",    category:"Vorratsschrank", icon:"🍚"},
+  // ── Tiefkühl (2. Gang) ───────────────────────────────────────────
+  {name:"Tiefkühlblattspinat",   category:"Tiefkühl",       icon:"🥬"},
+  {name:"Tiefkühlcremespinat",   category:"Tiefkühl",       icon:"🥬"},
+  {name:"Tiefkühlgemüse",        category:"Tiefkühl",       icon:"🥦"},
+  {name:"Tiefkühlpizza",         category:"Tiefkühl",       icon:"🍕"},
+  {name:"Pommes",                category:"Tiefkühl",       icon:"🍟"},
+  {name:"Süßkartoffelpommes",    category:"Tiefkühl",       icon:"🍠"},
+  {name:"Tiefkühlerbsen",        category:"Tiefkühl",       icon:"🫛"},
+  {name:"Tiefkühlkarfiol",       category:"Tiefkühl",       icon:"🥦"},
+  {name:"Tiefkühlbrokkoli",      category:"Tiefkühl",       icon:"🥦"},
+  // ── Milchprodukte & Getränke (Ende) ──────────────────────────────
+  {name:"Fruchtjoghurt",         category:"Kühlung",        icon:"🍓"},
+  {name:"Joghurt",               category:"Kühlung",        icon:"🥛"},
+  {name:"Sahne",                 category:"Kühlung",        icon:"🥛"},
+  {name:"Creme Fraiche",         category:"Kühlung",        icon:"🥛"},
+  {name:"Sauerrahm",             category:"Kühlung",        icon:"🥛"},
+  {name:"Butter",                category:"Kühlung",        icon:"🧈"},
+  {name:"Milch",                 category:"Kühlung",        icon:"🥛"},
+  {name:"Mineralwasser",         category:"Getränke",       icon:"💧"},
+  {name:"Sirup",                 category:"Getränke",       icon:"🧃"},
+  {name:"Cola",                  category:"Getränke",       icon:"🥤"},
+  {name:"Apfelsaft",             category:"Getränke",       icon:"🍎"},
+  // ── Kasse ────────────────────────────────────────────────────────
+  {name:"Batterien",             category:"Kasse",          icon:"🔋"},
 ];
 
 const CAT={
-  "Obst & Gemüse": {cls:"co",  icon:"🌿"},
-  "Vorratsschrank":{cls:"cv",  icon:"🏺"},
-  "Backwaren":     {cls:"cb",  icon:"🥐"},
-  "Kühlung":       {cls:"ck",  icon:"🧊"},
-  "Tiefkühl":      {cls:"ct",  icon:"❄️"},
-  "Haushalt":      {cls:"ch",  icon:"🏠"},
-  "Getränke":      {cls:"cg",  icon:"🥤"},
-  "Süßigkeiten":   {cls:"cs",  icon:"🍬"},
-  "Kasse":         {cls:"ck2", icon:"🛒"},
+  "Obst & Gemüse": {cls:"co",  icon:"🌿", color:[34,197,94]},
+  "Vorratsschrank":{cls:"cv",  icon:"🏺", color:[245,158,11]},
+  "Backwaren":     {cls:"cb",  icon:"🥐", color:[180,83,9]},
+  "Kühlung":       {cls:"ck",  icon:"🧊", color:[59,130,246]},
+  "Tiefkühl":      {cls:"ct",  icon:"❄️", color:[99,102,241]},
+  "Haushalt":      {cls:"ch",  icon:"🏠", color:[107,114,128]},
+  "Getränke":      {cls:"cg",  icon:"🥤", color:[14,165,233]},
+  "Süßigkeiten":   {cls:"cs",  icon:"🍬", color:[236,72,153]},
+  "Kasse":         {cls:"ck2", icon:"🛒", color:[234,179,8]},
 };
 const cc = c => CAT[c]?.cls  || 'cv';
 const ci = c => CAT[c]?.icon || '📦';
 
-/* ═══════════════ STATE ═══════════════ */
+/* ═══ STATE ═══ */
 let cart = {};
 let search = '', activeCat = '', activeView = 'products';
-let pendingSave = false; // debounce Firebase echo
 
-/* ═══════════════ FIREBASE ═══════════════ */
+/* ═══════════════════════════════════════════
+   FIREBASE — FIX: pendingSave komplett entfernt.
+   Früher wurde pendingSave=true gesetzt beim
+   eigenen Speichern und beim nächsten onValue-
+   Aufruf übersprungen. Problem: wenn Benutzer B
+   gleichzeitig etwas ändert und der Callback
+   während pendingSave=true feuert, wurde B's
+   Änderung ignoriert. Lösung: einfach immer
+   den neuesten Stand aus Firebase übernehmen.
+   Das "Echo" des eigenen Saves ist harmlos —
+   es rendert denselben Zustand nochmals.
+════════════════════════════════════════════ */
 onValue(DBref, snap => {
-  if(pendingSave){ pendingSave = false; return; } // skip our own echo
   cart = snap.val() || {};
-  renderAll(); updateStats(); updateBadge(); syncCartVisual();
+  renderAll();
+  updateStats();
+  updateBadge();
+  syncCartVisual();
 });
 
 function dbSave(){
-  pendingSave = true;
   set(DBref, Object.keys(cart).length ? cart : null);
 }
 
-/* ═══════════════ CART OPERATIONS ═══════════════ */
-
-// Optimistic qty update: patch only affected cards instantly
+/* ═══ CART ═══ */
 function updateQty(name, qty, isPlus){
   if(qty > 0) cart[name] = { qty, checked: cart[name]?.checked || false };
   else        delete cart[name];
 
-  // patch grid cards without re-render
   document.querySelectorAll(`.grid-card[data-name="${CSS.escape(name)}"]`).forEach(card=>{
     card.classList.toggle('in-cart', qty > 0);
     const qv = card.querySelector('.qty-val');
@@ -640,35 +575,29 @@ function updateQty(name, qty, isPlus){
     if(minus) minus.disabled = (qty === 0);
   });
 
-  renderShopping();  // re-render shopping list
+  renderShopping();
   updateStats();
   updateBadge(isPlus ? 'up' : null);
   syncCartVisual();
   dbSave();
 }
 
-// Toggle check – this is the function the checkboxes call
 function toggleCheck(name, checkboxEl){
   if(!cart[name]) return;
   const wasDone = cart[name].checked;
   cart[name].checked = !wasDone;
-
-  // Fly animation before DOM rebuild
   if(!wasDone && checkboxEl){
     const icon = CATALOG.find(p => p.name === name)?.icon || '🛒';
     flyToCart(icon, checkboxEl);
   }
-
-  renderShopping();     // ← re-renders AND re-binds events
+  renderShopping();
   updateStats();
   syncCartVisual(!wasDone);
   dbSave();
-
   if(!wasDone) checkConfetti();
 }
 
-/* ═══════════════ RENDERING ═══════════════ */
-
+/* ═══ RENDER ═══ */
 function gridCard(p, idx){
   const it = cart[p.name], qty = it?.qty || 0;
   return `<div class="grid-card ${qty>0?'in-cart':''}" data-name="${p.name}" style="animation-delay:${idx*22}ms">
@@ -738,7 +667,7 @@ function renderShopping(){
   el.innerHTML = items.length
     ? items.map(p => listCard(p)).join('')
     : `<div class="empty"><div class="empty-e">🛒</div><div class="empty-t">Liste ist leer</div><div class="empty-s">Produkte im Tab "Produkte" hinzufügen</div></div>`;
-  bindCheckEvents(el); // ← always bind after render
+  bindCheckEvents(el);
 }
 
 function renderAll(){
@@ -747,11 +676,7 @@ function renderAll(){
   renderShopping();
 }
 
-/* ═══════════════ EVENT BINDING ═══════════════
-   Split into two: grid (qty) and check (shopping).
-   Both are re-bound after each respective render.
-════════════════════════════════════════════════ */
-
+/* ═══ EVENTS ═══ */
 function bindGridEvents(container){
   container.querySelectorAll('.qty-btn').forEach(btn => {
     btn.addEventListener('click', e => {
@@ -760,18 +685,11 @@ function bindGridEvents(container){
       const cur  = cart[name]?.qty || 0;
       const isPlus = btn.classList.contains('plus');
       const newQty = isPlus ? cur+1 : Math.max(0, cur-1);
-
-      // number bounce
       const qv = btn.closest('.qty-wrap')?.querySelector('.qty-val');
-      if(qv){
-        qv.classList.remove('bu','bd');
-        void qv.offsetWidth;
-        qv.classList.add(isPlus ? 'bu' : 'bd');
-      }
+      if(qv){ qv.classList.remove('bu','bd'); void qv.offsetWidth; qv.classList.add(isPlus ? 'bu' : 'bd'); }
       updateQty(name, newQty, isPlus);
     });
   });
-  // ripple on grid cards
   container.querySelectorAll('.grid-card').forEach(card => {
     card.addEventListener('click', e => addRipple(card, e));
   });
@@ -779,15 +697,11 @@ function bindGridEvents(container){
 
 function bindCheckEvents(container){
   container.querySelectorAll('.check-box').forEach(cb => {
-    cb.addEventListener('click', e => {
-      e.stopPropagation();
-      toggleCheck(cb.dataset.check, cb);
-    });
+    cb.addEventListener('click', e => { e.stopPropagation(); toggleCheck(cb.dataset.check, cb); });
   });
 }
 
-/* ═══════════════ VISUAL HELPERS ═══════════════ */
-
+/* ═══ VISUAL ═══ */
 function updateStats(){
   const v = Object.values(cart), t = v.length, d = v.filter(i=>i.checked).length;
   const p = t ? Math.round(d/t*100) : 0;
@@ -821,7 +735,6 @@ function syncCartVisual(spin){
   }
 }
 
-// Emoji flies from checkbox to cart
 function flyToCart(emoji, fromEl){
   const stage = document.getElementById('cartWrap'); if(!stage) return;
   const fr = fromEl.getBoundingClientRect();
@@ -832,9 +745,9 @@ function flyToCart(emoji, fromEl){
   document.body.appendChild(div);
   const tx = sr.left + sr.width*0.5, ty = sr.top + sr.height*0.52;
   div.animate([
-    {left:fr.left+'px', top:fr.top+'px', fontSize:'24px', opacity:1, transform:'scale(1)'},
-    {left:((fr.left+tx)/2)+'px', top:(fr.top-30)+'px', fontSize:'18px', opacity:.85, transform:'scale(.8) rotate(-10deg)'},
-    {left:tx+'px', top:ty+'px', fontSize:'6px', opacity:0, transform:'scale(.05) rotate(-25deg)'}
+    {left:fr.left+'px',top:fr.top+'px',fontSize:'24px',opacity:1,transform:'scale(1)'},
+    {left:((fr.left+tx)/2)+'px',top:(fr.top-30)+'px',fontSize:'18px',opacity:.85,transform:'scale(.8) rotate(-10deg)'},
+    {left:tx+'px',top:ty+'px',fontSize:'6px',opacity:0,transform:'scale(.05) rotate(-25deg)'}
   ], {duration:650, easing:'cubic-bezier(.4,0,.6,1)', fill:'forwards'}).onfinish = ()=>div.remove();
 }
 
@@ -847,7 +760,7 @@ function addRipple(el, e){
   el.appendChild(rp); setTimeout(()=>rp.remove(), 560);
 }
 
-/* ═══════════════ CONFETTI ═══════════════ */
+/* ═══ CONFETTI ═══ */
 function checkConfetti(){
   const v = Object.values(cart);
   if(v.length > 0 && v.every(i=>i.checked)){ launchConfetti(); showToast('🎉 Alles erledigt!'); }
@@ -879,7 +792,7 @@ function launchConfetti(){
   draw(); setTimeout(()=>{ cancelAnimationFrame(fr); cv.style.display='none'; }, 3800);
 }
 
-/* ═══════════════ CHIPS ═══════════════ */
+/* ═══ CHIPS ═══ */
 (function(){
   const cats = [...new Set(CATALOG.map(p=>p.category))];
   const wrap = document.getElementById('chipsWrap');
@@ -895,7 +808,7 @@ function launchConfetti(){
   });
 })();
 
-/* ═══════════════ TABS ═══════════════ */
+/* ═══ TABS ═══ */
 document.querySelectorAll('.tab').forEach(tab=>{
   tab.addEventListener('click', ()=>{
     activeView = tab.dataset.view;
@@ -914,55 +827,294 @@ document.getElementById('searchInput').addEventListener('input', e=>{
 });
 document.getElementById('cartIconBtn').addEventListener('click', ()=>document.querySelector('[data-view="shopping"]').click());
 
-/* ═══════════════ CLEAR ═══════════════ */
+/* ═══ CLEAR ═══ */
 document.getElementById('clearBtn').addEventListener('click', ()=>document.getElementById('clearModal').classList.add('open'));
 document.getElementById('cancelClear').addEventListener('click', ()=>document.getElementById('clearModal').classList.remove('open'));
 document.getElementById('confirmClear').addEventListener('click', ()=>{
-  cart = {}; pendingSave = true; remove(DBref);
+  cart = {}; remove(DBref);
   renderAll(); updateStats(); updateBadge(); syncCartVisual();
   document.getElementById('clearModal').classList.remove('open');
   showToast('🗑️ Liste geleert');
 });
 document.getElementById('clearModal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
 
-/* ═══════════════ PRINT ═══════════════ */
-document.getElementById('printBtn').addEventListener('click', ()=>{
-  const items = CATALOG.filter(p=>cart[p.name]?.qty>0).map(p=>({...p,...cart[p.name]}));
+/* ══════════════════════════════════════════
+   PDF GENERIERUNG mit jsPDF
+   — Kein window.print() mehr
+   — Elegantes A4-Layout mit Checkboxen
+   — Kategorien mit farbigen Balken
+   — Teilen via Web Share API (WhatsApp etc.)
+══════════════════════════════════════════ */
+document.getElementById('printBtn').addEventListener('click', async () => {
+  const items = CATALOG.filter(p => cart[p.name]?.qty > 0);
   if(!items.length){ showToast('⚠️ Liste ist leer!'); return; }
-  const total=items.length, done=items.filter(i=>i.checked).length, pct=total?Math.round(done/total*100):0;
-  const now=new Date();
-  const dateStr=now.toLocaleDateString('de-AT',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const catOrder=[...new Set(CATALOG.map(p=>p.category))];
-  const g={};
-  items.forEach(p=>(g[p.category]=g[p.category]||[]).push(p));
-  let tables='';
-  catOrder.forEach(cat=>{
-    if(!g[cat]) return;
-    tables+=`<div class="print-cat-title">${ci(cat)} ${cat}</div>
-    <table><thead><tr><th></th><th>Produkt</th><th class="c-chk">✓</th><th class="c-qty">Menge</th></tr></thead><tbody>`+
-    g[cat].map(p=>`<tr><td class="c-icon">${p.icon}</td><td>${p.name}</td>
-      <td class="c-chk"><span class="chk-circle ${p.checked?'chk-done':''}"></span></td>
-      <td class="c-qty">${p.qty}×</td></tr>`).join('')+`</tbody></table>`;
-  });
-  document.getElementById('printPage').innerHTML=`
-    <div class="print-header"><div class="print-logo">Einkaufsliste</div><div class="print-meta">${dateStr}<br>Einkauf-App</div></div>
-    <div class="print-summary">
-      <div class="print-summary-box"><strong>${total}</strong><span>Artikel</span></div>
-      <div class="print-summary-box"><strong>${done}</strong><span>Erledigt</span></div>
-      <div class="print-summary-box"><strong>${pct}%</strong><span>Fortschritt</span></div>
-    </div>${tables}
-    <div class="print-footer"><span>Einkauf-App</span><span>Gedruckt: ${now.toLocaleString('de-AT')}</span></div>`;
-  setTimeout(()=>window.print(), 80);
+
+  const btn = document.getElementById('printBtn');
+  btn.innerHTML = '<span class="pdf-spinner"></span> PDF wird erstellt…';
+  btn.disabled = true;
+
+  await new Promise(r => setTimeout(r, 50)); // UI update
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+
+    const PW = 210, PH = 297;
+    const ML = 14, MR = 14, MT = 14;
+    const CW = PW - ML - MR; // content width = 182mm
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('de-AT',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    const timeStr = now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
+
+    let y = MT;
+
+    // ── HELPERS ──
+    const hex = ([r,g,b]) => [r,g,b];
+
+    // Draw rounded rect (jsPDF has roundedRect)
+    function roundRect(x, xw, yy, h, r, fill, stroke){
+      if(fill) doc.setFillColor(...fill);
+      if(stroke) doc.setDrawColor(...stroke);
+      doc.roundedRect(x, yy, xw, h, r, r, fill && stroke ? 'FD' : fill ? 'F' : 'D');
+    }
+
+    // ── HEADER BACKGROUND ──
+    doc.setFillColor(17, 24, 39);
+    doc.rect(0, 0, PW, 40, 'F');
+
+    // Green accent bar
+    doc.setFillColor(22, 163, 74);
+    doc.rect(0, 38, PW, 3, 'F');
+
+    // Title
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(26);
+    doc.text('Einkaufsliste', ML, 22);
+
+    // Green dot after title
+    doc.setFillColor(34, 197, 94);
+    doc.circle(ML + doc.getTextWidth('Einkaufsliste') + 2, 20.5, 2, 'F');
+
+    // Date & time right-aligned
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(156, 163, 175);
+    doc.text(dateStr, PW - MR, 18, { align: 'right' });
+    doc.text(timeStr + ' Uhr', PW - MR, 24, { align: 'right' });
+
+    y = 50;
+
+    // ── STATS ROW ──
+    const total = items.length;
+    const done  = items.filter(p => cart[p.name]?.checked).length;
+    const pct   = total ? Math.round(done/total*100) : 0;
+
+    const statBoxW = (CW - 8) / 3;
+    const stats = [
+      { label: 'ARTIKEL',   val: String(total) },
+      { label: 'ERLEDIGT',  val: String(done)  },
+      { label: 'FORTSCHRITT', val: pct + '%'   },
+    ];
+    stats.forEach((s, i) => {
+      const sx = ML + i*(statBoxW + 4);
+      roundRect(sx, statBoxW, y, 18, 3, [240,253,244], [209,250,229]);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(16);
+      doc.setTextColor(22, 163, 74);
+      doc.text(s.val, sx + statBoxW/2, y + 10, { align:'center' });
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(6);
+      doc.setTextColor(107, 114, 128);
+      doc.text(s.label, sx + statBoxW/2, y + 15.5, { align:'center' });
+    });
+
+    y += 24;
+
+    // Progress bar
+    doc.setFillColor(229,231,235);
+    doc.roundedRect(ML, y, CW, 4, 2, 2, 'F');
+    if(pct > 0){
+      doc.setFillColor(22,163,74);
+      doc.roundedRect(ML, y, CW * pct/100, 4, 2, 2, 'F');
+    }
+    y += 10;
+
+    // ── ITEMS BY CATEGORY ──
+    const catOrder = [...new Set(CATALOG.map(p=>p.category))];
+    const grouped = {};
+    items.forEach(p => (grouped[p.category] = grouped[p.category]||[]).push(p));
+
+    const ROW_H    = 8.5;   // item row height
+    const CAT_H    = 10;    // category header height
+    const PAGE_END = PH - 16; // bottom margin
+
+    for(const cat of catOrder){
+      if(!grouped[cat]) continue;
+      const catColor = CAT[cat]?.color || [107,114,128];
+      const catItems = grouped[cat];
+      const blockH = CAT_H + catItems.length * ROW_H + 4;
+
+      // Page break check
+      if(y + blockH > PAGE_END){
+        doc.addPage();
+        y = MT;
+      }
+
+      // ── Category header ──
+      // Color bar left
+      doc.setFillColor(...catColor);
+      doc.roundedRect(ML, y, 3, CAT_H - 2, 1.5, 1.5, 'F');
+
+      // Light tinted background
+      const bg = catColor.map(c => Math.min(255, c*0.12 + 243));
+      doc.setFillColor(...bg);
+      doc.roundedRect(ML+4, y, CW-4, CAT_H - 2, 2, 2, 'F');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...catColor);
+      doc.text(cat.toUpperCase(), ML+10, y + 5.8);
+
+      // Count badge right
+      const countText = catItems.length + ' Artikel';
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(107,114,128);
+      doc.text(countText, ML + CW - 2, y + 5.8, { align:'right' });
+
+      y += CAT_H + 1;
+
+      // ── Items ──
+      catItems.forEach((p, idx) => {
+        if(y + ROW_H > PAGE_END){ doc.addPage(); y = MT; }
+
+        const isDone = cart[p.name]?.checked;
+        const qty    = cart[p.name]?.qty || 1;
+
+        // Alternating row background
+        if(idx % 2 === 0){
+          doc.setFillColor(249, 250, 251);
+          doc.rect(ML, y, CW, ROW_H, 'F');
+        } else {
+          doc.setFillColor(255,255,255);
+          doc.rect(ML, y, CW, ROW_H, 'F');
+        }
+
+        // Checkbox
+        const cbX = ML + 2, cbY = y + 1.5, cbS = 5;
+        doc.setDrawColor(209,213,219);
+        doc.setLineWidth(0.4);
+        doc.roundedRect(cbX, cbY, cbS, cbS, 1, 1, 'D');
+        if(isDone){
+          doc.setFillColor(22,163,74);
+          doc.roundedRect(cbX, cbY, cbS, cbS, 1, 1, 'F');
+          doc.setTextColor(255,255,255);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7);
+          doc.text('✓', cbX + 1, cbY + 4);
+        }
+
+        // Product name
+        doc.setFont('helvetica', isDone ? 'italic' : 'normal');
+        doc.setFontSize(9);
+        if(isDone){
+          doc.setTextColor(156,163,175);
+          // Strikethrough line
+          const nameW = doc.getTextWidth(p.name);
+          doc.setDrawColor(156,163,175);
+          doc.setLineWidth(0.3);
+          doc.line(ML+10, y+4.3, ML+10+nameW, y+4.3);
+        } else {
+          doc.setTextColor(17,24,39);
+        }
+        doc.text(p.name, ML + 10, y + 5.5);
+
+        // Category label (small)
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(6.5);
+        doc.setTextColor(156,163,175);
+
+        // Qty badge right
+        const qtyText = qty + '×';
+        const qtyW = doc.getTextWidth(qtyText) + 4;
+        doc.setFillColor(...catColor.map(c => Math.min(255, c*0.15 + 240)));
+        doc.roundedRect(ML + CW - qtyW - 1, y + 1.8, qtyW + 1, 4.8, 1, 1, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...catColor);
+        doc.text(qtyText, ML + CW - qtyW/2 - 1, y + 5.5, { align:'center' });
+
+        y += ROW_H;
+      });
+
+      // Thin separator after category
+      doc.setDrawColor(229,231,235);
+      doc.setLineWidth(0.3);
+      doc.line(ML, y + 1, ML + CW, y + 1);
+      y += 5;
+    }
+
+    // ── FOOTER ──
+    const totalPages = doc.internal.getNumberOfPages();
+    for(let pg=1; pg<=totalPages; pg++){
+      doc.setPage(pg);
+      doc.setFillColor(249,250,251);
+      doc.rect(0, PH-12, PW, 12, 'F');
+      doc.setDrawColor(229,231,235);
+      doc.setLineWidth(0.3);
+      doc.line(0, PH-12, PW, PH-12);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(156,163,175);
+      doc.text('Einkauf-App', ML, PH - 5);
+      doc.text(`Seite ${pg} / ${totalPages}`, PW/2, PH - 5, { align:'center' });
+      doc.text(`Erstellt: ${now.toLocaleString('de-AT')}`, PW - MR, PH - 5, { align:'right' });
+    }
+
+    // ── SHARE / DOWNLOAD ──
+    const filename = `Einkaufsliste_${now.toISOString().slice(0,10)}.pdf`;
+
+    if(navigator.share && navigator.canShare){
+      try {
+        const blob = doc.output('blob');
+        const file = new File([blob], filename, { type:'application/pdf' });
+        if(navigator.canShare({ files:[file] })){
+          await navigator.share({ files:[file], title:'Einkaufsliste', text:'Meine Einkaufsliste' });
+          showToast('✅ PDF geteilt!');
+        } else {
+          doc.save(filename);
+          showToast('📄 PDF gespeichert!');
+        }
+      } catch(err){
+        if(err.name !== 'AbortError'){
+          doc.save(filename);
+          showToast('📄 PDF gespeichert!');
+        }
+      }
+    } else {
+      doc.save(filename);
+      showToast('📄 PDF gespeichert!');
+    }
+
+  } catch(err){
+    console.error('PDF error:', err);
+    showToast('❌ PDF Fehler: ' + err.message);
+  } finally {
+    btn.innerHTML = '📄 PDF erstellen';
+    btn.disabled = false;
+  }
 });
 
-/* ═══════════════ TOAST ═══════════════ */
+/* ═══ TOAST ═══ */
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 2600);
 }
 
-/* ═══════════════ INIT ═══════════════ */
+/* ═══ INIT ═══ */
 renderAll();
 </script>
 </body>
