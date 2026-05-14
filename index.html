@@ -617,7 +617,7 @@ function listCard(p){
     <div class="icon-bub ${cc(p.category)}">${p.icon}</div>
     <div class="p-info">
       <div class="p-name">${p.name}</div>
-      <div class="p-sub">${p.category} · ${qty}×</div>
+      <div class="p-sub">${qty}×</div>
     </div>
     <div class="check-box" data-check="${p.name}">
       <div class="check-inner ${done?'done':''}">${done?'✓':''}</div>
@@ -941,120 +941,65 @@ document.getElementById('printBtn').addEventListener('click', async () => {
     }
     y += 10;
 
-    // ── ITEMS BY CATEGORY ──
-    const catOrder = [...new Set(CATALOG.map(p=>p.category))];
-    const grouped = {};
-    items.forEach(p => (grouped[p.category] = grouped[p.category]||[]).push(p));
+    // ── ITEMS — einfach in Reihenfolge, keine Kategorien ──
+    const ROW_H    = 8.5;
+    const PAGE_END = PH - 16;
 
-    const ROW_H    = 8.5;   // item row height
-    const CAT_H    = 10;    // category header height
-    const PAGE_END = PH - 16; // bottom margin
+    items.forEach((p, idx) => {
+      if(y + ROW_H > PAGE_END){ doc.addPage(); y = MT; }
 
-    for(const cat of catOrder){
-      if(!grouped[cat]) continue;
-      const catColor = CAT[cat]?.color || [107,114,128];
-      const catItems = grouped[cat];
-      const blockH = CAT_H + catItems.length * ROW_H + 4;
+      const isDone = cart[p.name]?.checked;
+      const qty    = cart[p.name]?.qty || 1;
 
-      // Page break check
-      if(y + blockH > PAGE_END){
-        doc.addPage();
-        y = MT;
+      // Alternating row background
+      if(idx % 2 === 0){
+        doc.setFillColor(249, 250, 251);
+        doc.rect(ML, y, CW, ROW_H, 'F');
+      } else {
+        doc.setFillColor(255, 255, 255);
+        doc.rect(ML, y, CW, ROW_H, 'F');
       }
 
-      // ── Category header ──
-      // Color bar left
-      doc.setFillColor(...catColor);
-      doc.roundedRect(ML, y, 3, CAT_H - 2, 1.5, 1.5, 'F');
-
-      // Light tinted background
-      const bg = catColor.map(c => Math.min(255, c*0.12 + 243));
-      doc.setFillColor(...bg);
-      doc.roundedRect(ML+4, y, CW-4, CAT_H - 2, 2, 2, 'F');
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8);
-      doc.setTextColor(...catColor);
-      doc.text(cat.toUpperCase(), ML+10, y + 5.8);
-
-      // Count badge right
-      const countText = catItems.length + ' Artikel';
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(7);
-      doc.setTextColor(107,114,128);
-      doc.text(countText, ML + CW - 2, y + 5.8, { align:'right' });
-
-      y += CAT_H + 1;
-
-      // ── Items ──
-      catItems.forEach((p, idx) => {
-        if(y + ROW_H > PAGE_END){ doc.addPage(); y = MT; }
-
-        const isDone = cart[p.name]?.checked;
-        const qty    = cart[p.name]?.qty || 1;
-
-        // Alternating row background
-        if(idx % 2 === 0){
-          doc.setFillColor(249, 250, 251);
-          doc.rect(ML, y, CW, ROW_H, 'F');
-        } else {
-          doc.setFillColor(255,255,255);
-          doc.rect(ML, y, CW, ROW_H, 'F');
-        }
-
-        // Checkbox
-        const cbX = ML + 2, cbY = y + 1.5, cbS = 5;
-        doc.setDrawColor(209,213,219);
-        doc.setLineWidth(0.4);
-        doc.roundedRect(cbX, cbY, cbS, cbS, 1, 1, 'D');
-        if(isDone){
-          doc.setFillColor(22,163,74);
-          doc.roundedRect(cbX, cbY, cbS, cbS, 1, 1, 'F');
-          doc.setTextColor(255,255,255);
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(7);
-          doc.text('✓', cbX + 1, cbY + 4);
-        }
-
-        // Product name
-        doc.setFont('helvetica', isDone ? 'italic' : 'normal');
-        doc.setFontSize(9);
-        if(isDone){
-          doc.setTextColor(156,163,175);
-          // Strikethrough line
-          const nameW = doc.getTextWidth(p.name);
-          doc.setDrawColor(156,163,175);
-          doc.setLineWidth(0.3);
-          doc.line(ML+10, y+4.3, ML+10+nameW, y+4.3);
-        } else {
-          doc.setTextColor(17,24,39);
-        }
-        doc.text(p.name, ML + 10, y + 5.5);
-
-        // Category label (small)
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(6.5);
-        doc.setTextColor(156,163,175);
-
-        // Qty badge right
-        const qtyText = qty + '×';
-        const qtyW = doc.getTextWidth(qtyText) + 4;
-        doc.setFillColor(...catColor.map(c => Math.min(255, c*0.15 + 240)));
-        doc.roundedRect(ML + CW - qtyW - 1, y + 1.8, qtyW + 1, 4.8, 1, 1, 'F');
+      // Checkbox
+      const cbX = ML + 2, cbY = y + 1.5, cbS = 5;
+      doc.setDrawColor(209, 213, 219);
+      doc.setLineWidth(0.4);
+      doc.roundedRect(cbX, cbY, cbS, cbS, 1, 1, 'D');
+      if(isDone){
+        doc.setFillColor(22, 163, 74);
+        doc.roundedRect(cbX, cbY, cbS, cbS, 1, 1, 'F');
+        doc.setTextColor(255, 255, 255);
         doc.setFont('helvetica', 'bold');
-        doc.setFontSize(7.5);
-        doc.setTextColor(...catColor);
-        doc.text(qtyText, ML + CW - qtyW/2 - 1, y + 5.5, { align:'center' });
+        doc.setFontSize(7);
+        doc.text('✓', cbX + 1, cbY + 4);
+      }
 
-        y += ROW_H;
-      });
+      // Product name
+      doc.setFont('helvetica', isDone ? 'italic' : 'normal');
+      doc.setFontSize(10);
+      if(isDone){
+        doc.setTextColor(156, 163, 175);
+        const nameW = doc.getTextWidth(p.name);
+        doc.setDrawColor(156, 163, 175);
+        doc.setLineWidth(0.3);
+        doc.line(ML + 10, y + 4.5, ML + 10 + nameW, y + 4.5);
+      } else {
+        doc.setTextColor(17, 24, 39);
+      }
+      doc.text(p.name, ML + 10, y + 5.8);
 
-      // Thin separator after category
-      doc.setDrawColor(229,231,235);
-      doc.setLineWidth(0.3);
-      doc.line(ML, y + 1, ML + CW, y + 1);
-      y += 5;
-    }
+      // Qty badge right
+      const qtyText = qty + '×';
+      const qtyW = doc.getTextWidth(qtyText) + 5;
+      doc.setFillColor(240, 253, 244);
+      doc.roundedRect(ML + CW - qtyW - 1, y + 1.6, qtyW + 1, 5, 1.2, 1.2, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(7.5);
+      doc.setTextColor(22, 163, 74);
+      doc.text(qtyText, ML + CW - qtyW/2 - 1, y + 5.7, { align:'center' });
+
+      y += ROW_H;
+    });
 
     // ── FOOTER ──
     const totalPages = doc.internal.getNumberOfPages();
