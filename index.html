@@ -32,6 +32,10 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
 @keyframes badgeWobble{0%{transform:scale(1) rotate(0)}20%{transform:scale(1.45) rotate(-14deg)}45%{transform:scale(1.2) rotate(10deg)}65%{transform:scale(1.32) rotate(-7deg)}82%{transform:scale(1.1) rotate(4deg)}100%{transform:scale(1) rotate(0)}}
 .cart-badge.wobble{animation:badgeWobble .5s ease;}
 
+/* OFFLINE BANNER */
+.offline-banner{display:none;background:#fef3c7;color:#92400e;font-size:11.5px;font-weight:600;text-align:center;padding:6px 12px;border-bottom:1px solid #fde68a;}
+.offline-banner.show{display:block;}
+
 /* SEARCH */
 .search-wrap{position:relative;}
 .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--tx3);pointer-events:none;}
@@ -202,6 +206,7 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
       <input type="search" class="search-input" id="searchInput" placeholder="Produkt suchen…" autocomplete="off">
     </div>
   </div>
+  <div class="offline-banner" id="offlineBanner">📡 Offline — Änderungen werden synchronisiert, sobald wieder Verbindung besteht</div>
 
   <div class="tabs">
     <button class="tab active" data-view="products"><span class="ti">🏪</span>Produkte</button>
@@ -337,7 +342,7 @@ body{font-family:'Sora',-apple-system,sans-serif;background:var(--bg);color:var(
 
 <script type="module">
 import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 initializeApp({
   apiKey:"AIzaSyAdnSN7JJmJKBKrjfu6_73kPkCrG1Ha1E4",
@@ -539,34 +544,77 @@ let cart = {};
 let search = '', activeCat = '', activeView = 'products';
 let shoppingSig = null; // Signatur des aktuell gerenderten Einkaufslisten-Artikelsets (für In-Place-Reconcile)
 
-/* ═══════════════════════════════════════════
-   FIREBASE — FIX: pendingSave komplett entfernt.
-   Früher wurde pendingSave=true gesetzt beim
-   eigenen Speichern und beim nächsten onValue-
-   Aufruf übersprungen. Problem: wenn Benutzer B
-   gleichzeitig etwas ändert und der Callback
-   während pendingSave=true feuert, wurde B's
-   Änderung ignoriert. Lösung: einfach immer
-   den neuesten Stand aus Firebase übernehmen.
-   Das "Echo" des eigenen Saves ist harmlos —
-   es rendert denselben Zustand nochmals.
-════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   FIREBASE — ZWEI URSACHEN FÜR DEN DATENVERLUST BEHOBEN:
+
+   BUG 1 (Hauptursache): Firebase-Keys dürfen die Zeichen
+   . # $ / [ ] NICHT enthalten. Artikel wie
+   "Fussili / Spiralnudeln" oder "Basmatireis / Reis" wurden
+   direkt als Key verwendet. Sobald so ein Artikel im Wagen
+   lag, schlug set(DBref, cart) für das GESAMTE Objekt fehl
+   bzw. schrieb verschachtelte Pfade — der Fehler war lautlos
+   (Promise-Rejection ohne .catch). Ergebnis: nach Neuladen
+   waren Artikel teilweise oder ganz weg.
+   → Lösung: fbKey() bereinigt den Key, der echte Name wird
+     als Feld "name" im Wert mitgespeichert.
+
+   BUG 2: dbSave() schrieb immer den KOMPLETTEN Warenkorb
+   (set auf den Wurzelknoten). Bei zwei Geräten gewinnt der
+   letzte Schreiber und überschreibt alles — ein Gerät mit
+   veraltetem Stand (z. B. Tab aus dem Hintergrund, kurz
+   offline) löschte damit die Artikel des anderen.
+   → Lösung: pro Artikel ein gezieltes update()-Patch.
+     update() ändert nur den einen Kindknoten, alle anderen
+     Artikel bleiben unberührt. null im Patch löscht den
+     Eintrag. Gleichzeitige Änderungen verschiedener Artikel
+     können sich so nicht mehr gegenseitig auslöschen.
+
+   Zusätzlich: Fehlerbehandlung mit Toast + Offline-Anzeige
+   über den ".info/connected"-Knoten.
+═══════════════════════════════════════════════════════════ */
+
+// Firebase-sicherer Key: verbotene Zeichen . # $ / [ ] ersetzen
+const fbKey = name => name.replace(/[.#$/\[\]]/g, '_');
+
 onValue(DBref, snap => {
-  cart = snap.val() || {};
-  // FIX: KEIN renderAll() mehr. Das destruktive innerHTML-Neuaufbauen aller
-  // ~150 Produktkarten (inkl. neu getriggerter Einblend-Animationen) bei jedem
-  // Firebase-Echo war die Ursache fürs "kurz schwarz / Seite lädt neu".
-  // Stattdessen nur die geänderten Zustände in-place patchen — der Echtzeit-
-  // Sync zwischen mehreren Geräten bleibt vollständig erhalten.
+  const raw = snap.val() || {};
+  cart = {};
+  Object.entries(raw).forEach(([key, it]) => {
+    if(!it || typeof it !== 'object') return;
+    // Neue Einträge tragen den echten Namen im Feld "name";
+    // alte Einträge (Key = Name) bleiben so weiterhin lesbar.
+    const name = it.name || key;
+    cart[name] = { qty: it.qty || 0, checked: !!it.checked };
+  });
+  // Kein destruktives renderAll() — nur in-place patchen, damit beim
+  // Firebase-Echo nichts flackert und keine Animationen neu triggern.
   applyCartToGrids();
   renderShopping();
   updateStats();
   updateBadge();
   syncCartVisual();
+}, err => {
+  console.error('Firebase read error:', err);
+  showToast('⚠️ Verbindung zur Datenbank fehlgeschlagen');
 });
 
-function dbSave(){
-  set(DBref, Object.keys(cart).length ? cart : null);
+// Verbindungsstatus anzeigen (Firebase puffert Schreibvorgänge offline
+// im Speicher — aber der Benutzer soll wissen, dass er offline ist)
+onValue(ref(db, '.info/connected'), snap => {
+  document.getElementById('offlineBanner').classList.toggle('show', snap.val() === false);
+});
+
+/* Speichert NUR den einen geänderten Artikel (atomarer Patch).
+   cart[name] fehlt → null → Firebase löscht den Kindknoten. */
+function dbSaveItem(name){
+  const it = cart[name];
+  const patch = {
+    [fbKey(name)]: it ? { name, qty: it.qty, checked: !!it.checked } : null
+  };
+  update(DBref, patch).catch(err => {
+    console.error('Firebase write error:', err);
+    showToast('⚠️ Speichern fehlgeschlagen!');
+  });
 }
 
 /* ═══ CART ═══ */
@@ -586,7 +634,7 @@ function updateQty(name, qty, isPlus){
   updateStats();
   updateBadge(isPlus ? 'up' : null);
   syncCartVisual();
-  dbSave();
+  dbSaveItem(name);
 }
 
 function toggleCheck(name, checkboxEl){
@@ -600,7 +648,7 @@ function toggleCheck(name, checkboxEl){
   renderShopping();
   updateStats();
   syncCartVisual(!wasDone);
-  dbSave();
+  dbSaveItem(name);
   if(!wasDone) checkConfetti();
 }
 
@@ -697,8 +745,7 @@ function renderShopping(){
 }
 
 /* Patcht alle bereits gerenderten Grid-Karten (Produkte- & Kategorien-Tab) auf den
-   aktuellen cart-Zustand — OHNE innerHTML neu zu setzen. Das ersetzt das destruktive
-   renderProducts()/renderCategories() im Firebase-Echo und verhindert das Aufblitzen. */
+   aktuellen cart-Zustand — OHNE innerHTML neu zu setzen. */
 function applyCartToGrids(){
   document.querySelectorAll('.grid-card').forEach(card => {
     const name = card.dataset.name;
@@ -872,7 +919,11 @@ document.getElementById('cartIconBtn').addEventListener('click', ()=>document.qu
 document.getElementById('clearBtn').addEventListener('click', ()=>document.getElementById('clearModal').classList.add('open'));
 document.getElementById('cancelClear').addEventListener('click', ()=>document.getElementById('clearModal').classList.remove('open'));
 document.getElementById('confirmClear').addEventListener('click', ()=>{
-  cart = {}; remove(DBref);
+  cart = {};
+  remove(DBref).catch(err => {
+    console.error('Firebase remove error:', err);
+    showToast('⚠️ Löschen fehlgeschlagen!');
+  });
   applyCartToGrids(); renderShopping(); updateStats(); updateBadge(); syncCartVisual();
   document.getElementById('clearModal').classList.remove('open');
   showToast('🗑️ Liste geleert');
@@ -881,10 +932,6 @@ document.getElementById('clearModal').addEventListener('click', function(e){ if(
 
 /* ══════════════════════════════════════════
    PDF GENERIERUNG mit jsPDF
-   — Kein window.print() mehr
-   — Elegantes A4-Layout mit Checkboxen
-   — Kategorien mit farbigen Balken
-   — Teilen via Web Share API (WhatsApp etc.)
 ══════════════════════════════════════════ */
 document.getElementById('printBtn').addEventListener('click', async () => {
   const items = CATALOG.filter(p => cart[p.name]?.qty > 0);
@@ -910,10 +957,7 @@ document.getElementById('printBtn').addEventListener('click', async () => {
 
     let y = MT;
 
-    // ── HELPERS ──
-    const hex = ([r,g,b]) => [r,g,b];
-
-    // Draw rounded rect (jsPDF has roundedRect)
+    // Draw rounded rect
     function roundRect(x, xw, yy, h, r, fill, stroke){
       if(fill) doc.setFillColor(...fill);
       if(stroke) doc.setDrawColor(...stroke);
